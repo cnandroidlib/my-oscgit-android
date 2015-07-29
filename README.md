@@ -5,12 +5,15 @@
 <img src="./screenshot/Screenshot_4.jpeg" width="30%" height="30%">
  
 ### Git@OSC非官方android客户端
-本产品是Git@OSC非官方客户端，遵循Material Design设计原则，官方客户端界面实在是丑。参考官方客户端地址：http://http://git.oschina.net/appclient
+本产品是Git@OSC非官方客户端，遵循Material Design设计原则，官方客户端界面实在是丑。
+参考官方客户端地址：http://http://git.oschina.net/appclient
 - 界面采取Material Design设计风格
 - 使用android support design中的控件替代原生或者其它开源控件
 - 使用RecycleView代替Listview
 - 使用谷歌Volley代替android-async-http和universal-image-loader
 - 增加切换主题功能
+
+最新代码请到https://github.com/BinJing/my-oscgit-android.git下载
 
 ### 下一步更新计划
 - 代码重构
