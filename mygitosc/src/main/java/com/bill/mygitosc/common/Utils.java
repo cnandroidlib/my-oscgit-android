@@ -18,6 +18,10 @@ import java.util.Date;
 public class Utils {
     public static final int LOGIN_SUCCESS_EVNET = 0;
 
+    public static boolean ignoreCaseContain(String s1, String s2) {
+        return s1.toLowerCase().indexOf(s2.toLowerCase()) >= 0;
+    }
+
     private static String getEventsTitle(SelfEvent event) {
         String title = "";
         if (event.getEvents().getIssue() != null) {
@@ -116,6 +120,11 @@ public class Utils {
             if (now.getMonth() == date.getMonth()) {
                 if (now.getDate() == date.getDate()) {
                     return context.getString(R.string.today, hourMinDateFormat.format(date));
+                    //return hourMinDateFormat.format(date);
+                } else if (now.getDate() - date.getDate() == 1) {
+                    return context.getString(R.string.first_before_dat, hourMinDateFormat.format(date));
+                } else if (now.getDate() - date.getDate() == 2) {
+                    return context.getString(R.string.secode_before_dat, hourMinDateFormat.format(date));
                 } else {
                     return String.format(context.getString(R.string.before_day), now.getDate() - date.getDate(), hourMinDateFormat.format(date));
                 }
@@ -144,6 +153,6 @@ public class Utils {
 
     public static boolean checkNoPic(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(BaseActivity.PREFERENCE_FILE_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getBoolean(context.getString(R.string.no_picture_mode_key), true);
+        return sharedPreferences.getBoolean(context.getString(R.string.no_picture_mode_key), false);
     }
 }

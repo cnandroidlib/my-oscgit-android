@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.bill.mygitosc.R;
 import com.bill.mygitosc.bean.Project;
-import com.bill.mygitosc.common.AppContext;
 import com.bill.mygitosc.common.BitmapCache;
 import com.bill.mygitosc.common.TypefaceUtils;
 import com.bill.mygitosc.common.Utils;
@@ -70,6 +68,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectV
     @Override
     public ProjectViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ProjectViewHolder(LayoutInflater.from(context).inflate(R.layout.recycleview_project_item, parent, false));
+        //return new ProjectViewHolder(LayoutInflater.from(context).inflate(R.layout.recycleview_project_item_card, parent, false));
     }
 
     @Override
@@ -94,9 +93,13 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectV
         }
 
         if (!TextUtils.isEmpty(project.getLast_push_at())) {
-            holder.tv_createtime.setText(Utils.friendlyFormat(context, project.getLast_push_at()));
+            TypefaceUtils.setIconText(context, holder.tv_createtime, context.getString(R.string.fa_clock_o) + " " +
+                    Utils.friendlyFormat(context, project.getLast_push_at()));
+            //holder.tv_createtime.setText(Utils.friendlyFormat(context, project.getLast_push_at()));
         } else if (!TextUtils.isEmpty(project.getCreated_at())) {
-            holder.tv_createtime.setText(Utils.friendlyFormat(context, project.getCreated_at()));
+            TypefaceUtils.setIconText(context, holder.tv_createtime, context.getString(R.string.fa_clock_o) + " " +
+                    Utils.friendlyFormat(context, project.getCreated_at()));
+            //holder.tv_createtime.setText(Utils.friendlyFormat(context, project.getCreated_at()));
         }
 
         holder.setUserID(project.getOwner().getId());
@@ -107,7 +110,6 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectV
             if (portraitURL.endsWith("portrait.gif")) {
                 holder.iv_portrait.setImageResource(R.drawable.mini_avatar);
             } else {
-                Log.d(AppContext.TAG,"load portrait:"+position);
                 ImageLoader.ImageListener listener = ImageLoader.getImageListener(holder.iv_portrait,
                         R.drawable.mini_avatar, R.drawable.mini_avatar);
                 mImageLoader.get(portraitURL, listener);

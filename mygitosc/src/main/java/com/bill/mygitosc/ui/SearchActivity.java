@@ -59,6 +59,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
 
     private void initView() {
         searchView.setOnQueryTextListener(this);
+        //searchView.setIconified(false);
         searchView.setIconifiedByDefault(false);
         searchView.setFocusable(true);
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

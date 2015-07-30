@@ -6,5 +6,8 @@
     <string name="sem_empty_star">\uf006</string>
     <string name="sem_fork">\uf126</string>
     <string name="sem_tag">\uf02b</string>
+    <string name="sem_lock">\uf023</string>
+    <string name="sem_user">\uf007</string>
+
     <string name="fa_clock_o">\uf017</string>
 </resources>

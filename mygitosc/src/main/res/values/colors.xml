@@ -14,4 +14,7 @@
     <color name="listitem_gray">#515151</color>
 
     <color name="bg_gray">#1f203a2c</color>
+
+    <color name="red">#ffff0000</color>
+    <color name="no_select_white">#80ffffff</color>
 </resources>

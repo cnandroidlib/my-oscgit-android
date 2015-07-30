@@ -11,6 +11,9 @@ public class Session {
     private String private_token;
     private String email;
     private String bio;
+    private String blog;
+    private String weibo;
+    private Follow follow;
 
     public int getId() {
         return id;
@@ -66,6 +69,30 @@ public class Session {
 
     public void setPrivate_token(String private_token) {
         this.private_token = private_token;
+    }
+
+    public String getBlog() {
+        return blog;
+    }
+
+    public void setBlog(String blog) {
+        this.blog = blog;
+    }
+
+    public Follow getFollow() {
+        return follow;
+    }
+
+    public void setFollow(Follow follow) {
+        this.follow = follow;
+    }
+
+    public String getWeibo() {
+        return weibo;
+    }
+
+    public void setWeibo(String weibo) {
+        this.weibo = weibo;
     }
 }
 

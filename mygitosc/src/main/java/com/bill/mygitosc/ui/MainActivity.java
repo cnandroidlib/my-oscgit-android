@@ -7,7 +7,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
@@ -138,11 +137,12 @@ public class MainActivity extends BaseActivity {
                                 startActivity(intent);
                                 return true;
                             }
-                            if (menuItemId != R.id.menu_item_language) {
+                            /*if (menuItemId != R.id.menu_item_language) {
                                 getSupportActionBar().setDisplayShowTitleEnabled(true);
                                 getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                                 toolbar.setTitle(menuItem.getTitle());
-                            }
+                            }*/
+                            toolbar.setTitle(menuItem.getTitle());
                             menuItem.setChecked(true);
                             initMainContent(menuItemId);
                             currentNavViewMenuItem = menuItem.getItemId();
@@ -158,14 +158,15 @@ public class MainActivity extends BaseActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (navViewMenuItem == R.id.menu_item_explore) {
-            fragmentTransaction.replace(R.id.tab_viewpage_layout, new FindTabFragment(), null).commit();
+            fragmentTransaction.replace(R.id.main_content_layout, new FindTabFragment(), null).commit();
         } else if (navViewMenuItem == R.id.menu_item_myself) {
-            fragmentTransaction.replace(R.id.tab_viewpage_layout, SelfInfoTabFragment.newInstance(AppContext.getInstance().getSession().getId()), null)
+            fragmentTransaction.replace(R.id.main_content_layout, SelfInfoTabFragment.newInstance(AppContext.getInstance().getSession().getId()), null)
                     .commit();
         } else if (navViewMenuItem == R.id.menu_item_language) {
-            fragmentTransaction.replace(R.id.tab_viewpage_layout, new LanguageFragment(), null).commit();
+            //fragmentTransaction.replace(R.id.tab_viewpage_layout, new LanguageFragment(), null).commit();
+            fragmentTransaction.replace(R.id.main_content_layout, new LanguageCardFragment(), null).commit();
         } else if (navViewMenuItem == R.id.menu_item_shake) {
-            fragmentTransaction.replace(R.id.tab_viewpage_layout, new ShakeFragment(), null).commit();
+            fragmentTransaction.replace(R.id.main_content_layout, new ShakeFragment(), null).commit();
         } else {
         }
     }
@@ -235,7 +236,7 @@ public class MainActivity extends BaseActivity {
                         });
                 builder.show();
                 return true;
-            case R.id.action_lagout:
+            case R.id.action_logout:
                 AppContext.getInstance().setSession(null);
                 userNameTextView.setText(getString(R.string.need_ano_login_hint));
                 myPortrait.setImageResource(R.drawable.mini_avatar);

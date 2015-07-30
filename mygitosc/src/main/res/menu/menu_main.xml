@@ -15,7 +15,7 @@
         android:title="@string/action_remind"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_lagout"
+        android:id="@+id/action_logout"
         android:orderInCategory="100"
         android:title="@string/action_lagout"
         app:showAsAction="never" />

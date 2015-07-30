@@ -48,7 +48,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_personal_info">PersonalInfoActivity</string>
-    <string name="login_title">登&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;录</string>
+    <string name="login_title">登录</string>
     <string name="username_hint">请输出注册用户名</string>
     <string name="password_hint">请输入密码</string>
     <string name="msg_login_username_null">用户名不能为空</string>
@@ -68,7 +68,7 @@
     <string name="description">个人介绍：</string>
     <string name="description_null">暂无介绍</string>
     <string name="genenal_info">基本信息</string>
-    <string name="additional_info">额外信息</string>
+    <string name="additional_info">其它信息</string>
     <string name="email">邮箱：</string>
     <string name="weibo">微博：</string>
     <string name="blog">博客：</string>
@@ -80,7 +80,7 @@
     <string name="need_ano_login_hint">请重新登录</string>
     <string name="title_activity_view_self_info">ViewSelfInfo</string>
     <string name="no_picture_mode_key">no_picture_mode_key</string>
-    <string name="no_picture_mode">开启无图模式</string>
+    <string name="no_picture_mode">开启无图浏览模式</string>
     <string name="request_data_error_but_hint">加载失败，请点击重试</string>
     <string name="no_data_but_hint">暂时没有数据，点击重试</string>
     <string name="action_share">分享</string>
@@ -101,6 +101,8 @@
     <string name="create_project_title">创建了</string>
     <string name="branch_title">分支</string>
     <string name="today">今天%s</string>
+    <string name="first_before_dat">昨天%s</string>
+    <string name="secode_before_dat">前天%s</string>
     <string name="before_day">%1$d天前%2$s</string>
     <string name="before_month">%d个月前</string>
     <string name="before_year">%d年前</string>
@@ -132,4 +134,13 @@
     <string name="title_activity_search">SearchActivity</string>
     <string name="project_search_title">项目搜索</string>
     <string name="search_hint">点此输入搜索关键词</string>
+    <string name="gitosc_login_description">在线代码托管平台,服务永久免费</string>
+    <string name="account_title">账户：</string>
+    <string name="no_content">暂无</string>
+    <string name="no_point">未指定</string>
+    <string name="theme_num_hint">%d个主题</string>
+    <string name="title_activity_view_language_projecto">ViewLanguageProjectoActivity</string>
+    <string name="language_project_title">项目列表</string>
+    <string name="search_language_hint">搜索语言</string>
+
 </resources>

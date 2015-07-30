@@ -1,11 +1,16 @@
 package com.bill.mygitosc.ui;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,9 +25,13 @@ import com.bill.mygitosc.bean.StarWatchOptionResult;
 import com.bill.mygitosc.common.AppContext;
 import com.bill.mygitosc.common.HttpUtils;
 import com.bill.mygitosc.common.TypefaceUtils;
+import com.bill.mygitosc.common.Utils;
 import com.bill.mygitosc.gson.GsonRequest;
+import com.bill.mygitosc.widget.GridViewForScroll;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.InjectView;
@@ -49,11 +58,18 @@ public class ViewProjectInfoActivity extends BaseActivity {
     @InjectView(R.id.project_watchnum)
     TextView projectWatchnum;
 
+    @InjectView(R.id.ll_star)
+    LinearLayout llstarLinear;
+    @InjectView(R.id.ll_watch)
+    LinearLayout llwatchLinear;
     @InjectView(R.id.star_watch_linearlayout)
     View starWatchLinearLayout;
 
     @InjectView(R.id.project_code_listview)
     ListView projectCodeListView;
+
+    @InjectView(R.id.gridview)
+    GridViewForScroll gridView;
 
     private Project currentProject;
 
@@ -70,10 +86,21 @@ public class ViewProjectInfoActivity extends BaseActivity {
     }
 
     private void initView() {
+        if (AppContext.getInstance().getCurrentTheme() == R.style.AppBaseTheme) {
+            llstarLinear.setBackground(getResources().getDrawable(R.drawable.bg_style_blue));
+            llwatchLinear.setBackground(getResources().getDrawable(R.drawable.bg_style_blue));
+        } else {
+            llstarLinear.setBackground(getResources().getDrawable(R.drawable.bg_style_green));
+            llwatchLinear.setBackground(getResources().getDrawable(R.drawable.bg_style_green));
+        }
+
+        initGridview();
+
         projectName.setText(currentProject.getName());
         projectDescription.setText(currentProject.getDescription());
         projectStarnum.setText(currentProject.getStars_count() + "");
         projectWatchnum.setText(currentProject.getWatches_count() + "");
+
         setStared(currentProject.isStared());
         setWatched(currentProject.isWatched());
         ArrayAdapter<String> projectCode = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
@@ -96,10 +123,59 @@ public class ViewProjectInfoActivity extends BaseActivity {
         });
     }
 
+    private void initGridview() {
+        List<String> mData = new ArrayList<String>();
+
+        mData.add(getString(R.string.fa_clock_o) + " " + Utils.friendlyFormat(this, currentProject.getCreated_at()));
+        mData.add(getString(R.string.sem_fork) + " " + currentProject.getForks_count());
+        /*mData.add(getString(R.string.sem_lock) + " " + "");*/
+        String language = currentProject.getLanguage();
+        if (TextUtils.isEmpty(language)) {
+            language = getString(R.string.no_point);
+        }
+        mData.add(getString(R.string.sem_tag) + " " + language);
+        mData.add(getString(R.string.sem_user) + " " + currentProject.getOwner().getName());
+        gridView.setAdapter(new ProjectOtherArrayAdapter(this, R.layout.simple_gridview_item, mData));
+    }
+
+    class ProjectOtherArrayAdapter extends ArrayAdapter<String> {
+        private int resourceId;
+
+        public ProjectOtherArrayAdapter(Context context, int resourceId, List<String> objects) {
+            super(context, resourceId, objects);
+            this.resourceId = resourceId;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view;
+            ViewHolder viewHolder;
+            if (convertView == null) {
+                view = LayoutInflater.from(getContext()).inflate(resourceId, null);
+                viewHolder = new ViewHolder();
+                viewHolder.textView = (TextView) view.findViewById
+                        (R.id.textview);
+                view.setTag(viewHolder);
+            } else {
+                view = convertView;
+                viewHolder = (ViewHolder) view.getTag();
+            }
+            TypefaceUtils.setIconText(ViewProjectInfoActivity.this, viewHolder.textView, getItem(position));
+            //viewHolder.textView.setText(getItem(position));
+            return view;
+        }
+
+        class ViewHolder {
+            TextView textView;
+        }
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
         if (AppContext.getInstance().getLoginFlag()) {
+
+            setStarWatchClickable(false);
             RequestQueue mQueue = Volley.newRequestQueue(this);
 
             GsonRequest<Project> gsonRequest = new GsonRequest<Project>(HttpUtils.getProjectURl(currentProject.getId()), Project.class,
@@ -109,33 +185,31 @@ public class ViewProjectInfoActivity extends BaseActivity {
                             currentProject = response;
                             setStared(currentProject.isStared());
                             setWatched(currentProject.isWatched());
-                            starWatchLinearLayout.setVisibility(View.VISIBLE);
+                            //starWatchLinearLayout.setVisibility(View.VISIBLE);
+                            setStarWatchClickable(true);
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    starWatchLinearLayout.setVisibility(View.VISIBLE);
+                    //starWatchLinearLayout.setVisibility(View.VISIBLE);
+                    setStarWatchClickable(true);
                 }
             });
             mQueue.add(gsonRequest);
         } else {
-            starWatchLinearLayout.setVisibility(View.VISIBLE);
+            //starWatchLinearLayout.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void setStarWatchClickable(boolean result) {
+        llstarLinear.setClickable(result);
+        llwatchLinear.setClickable(result);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        //starWatchLinearLayout.setVisibility(View.GONE);
     }
-
-    /*@Override
-    protected void initToolbar() {
-        toolbar.setTitle(currentProject.getName());
-        toolbar.setSubtitleTextColor(getResources().getColor(android.R.color.white));
-        toolbar.setSubtitle(currentProject.getOwner().getName());
-        super.initToolbar();
-    }*/
 
     @Override
     protected int getLayoutView() {

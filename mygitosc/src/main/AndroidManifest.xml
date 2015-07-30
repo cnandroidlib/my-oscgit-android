@@ -47,6 +47,10 @@
             android:name=".ui.SearchActivity"
             android:label="@string/title_activity_search" >
         </activity>
+        <activity
+            android:name=".ui.ViewLanguageProjectActivity"
+            android:label="@string/title_activity_view_language_projecto" >
+        </activity>
     </application>
 
 </manifest>

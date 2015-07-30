@@ -17,14 +17,9 @@ public class ViewSelfInfoActivity extends BaseActivity {
             userId = getIntent().getIntExtra(UserID, -1);
             userName = getIntent().getStringExtra(UserName);
         }
+        toolbar.setTitle(userName);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.viewself_info_fragment, SelfInfoTabFragment.newInstance(userId), null).commit();
-    }
-
-    @Override
-    protected void initToolbar() {
-        super.initToolbar();
-        toolbar.setTitle(userName);
     }
 
     @Override

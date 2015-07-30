@@ -21,7 +21,7 @@
             layout="@layout/toolbar" />
 
         <FrameLayout
-            android:id="@+id/tab_viewpage_layout"
+            android:id="@+id/main_content_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

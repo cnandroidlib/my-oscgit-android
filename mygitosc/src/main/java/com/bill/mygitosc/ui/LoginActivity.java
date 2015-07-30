@@ -79,6 +79,13 @@ public class LoginActivity extends BaseActivity implements TextView.OnEditorActi
             } else {
                 loginButton.setEnabled(true);
             }
+            if(TextUtils.isEmpty(pwd)){
+                passwordInputLayout.setHint(getString(R.string.password_hint));
+            }
+
+            if(TextUtils.isEmpty(account)){
+                userNameInputLayout.setHint(getString(R.string.username_hint));
+            }
         }
     };
 

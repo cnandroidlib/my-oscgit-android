@@ -30,7 +30,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
         final TypedArray a = context.obtainStyledAttributes(ATTRS);
         mDivider = a.getDrawable(0);
         a.recycle();
-        //mDivider = context.getResources().getDrawable(R.drawable.divider_blue);
+        //mDivider = context.getResources().getDrawable(R.drawable.divider_gray);
         setOrientation(orientation);
     }
 
