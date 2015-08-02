@@ -1,11 +1,12 @@
 package com.bill.mygitosc.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by liaobb on 2015/7/28.
  */
-public class Data {
+public class Data implements Serializable {
     private String ref;
     private List<Commits> commits;
 

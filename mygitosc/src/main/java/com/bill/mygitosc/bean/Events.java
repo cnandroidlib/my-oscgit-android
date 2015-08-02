@@ -1,9 +1,11 @@
 package com.bill.mygitosc.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by liaobb on 2015/7/28.
  */
-public class Events {
+public class Events implements Serializable {
     private Issue issue;
     private Pull_Request pull_request;
 

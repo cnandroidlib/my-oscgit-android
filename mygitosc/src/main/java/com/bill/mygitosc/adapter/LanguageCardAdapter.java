@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.bill.mygitosc.R;
 import com.bill.mygitosc.bean.Language;
 import com.bill.mygitosc.common.LanguageFilter;
-import com.bill.mygitosc.ui.ViewLanguageProjectActivity;
+import com.bill.mygitosc.ui.activity.ViewLanguageProjectActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ public class LanguageCardAdapter extends RecyclerView.Adapter<LanguageCardAdapte
     }
 
     /*public LanguageCardAdapter(Context context, List<Language> languageList) {
-        this.mData = languageList;
+        this.mDatas = languageList;
         this.context = context;
     }*/
 

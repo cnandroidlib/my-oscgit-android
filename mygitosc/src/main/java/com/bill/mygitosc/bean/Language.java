@@ -1,9 +1,11 @@
 package com.bill.mygitosc.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by liaobb on 2015/7/24.
  */
-public class Language {
+public class Language implements Serializable{
     private int id;
     private String name;
     private int projects_count;

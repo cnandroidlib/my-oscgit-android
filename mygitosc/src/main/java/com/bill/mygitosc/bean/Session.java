@@ -1,9 +1,11 @@
 package com.bill.mygitosc.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by liaobb on 2015/7/24.
  */
-public class Session {
+public class Session implements Serializable {
     private int id;
     private String name;
     private String new_portrait;

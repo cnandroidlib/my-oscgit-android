@@ -50,8 +50,6 @@ public class LanguageFilter extends Filter {
 
     @Override
     protected void publishResults(CharSequence constraint, FilterResults results) {
-        //adapter.clear();
         adapter.addViewDatasets((ArrayList<Language>) results.values);
-        //adapter.notifyDataSetChanged();
     }
 }

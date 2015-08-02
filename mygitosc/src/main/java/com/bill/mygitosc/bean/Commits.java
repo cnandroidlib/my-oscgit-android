@@ -1,9 +1,11 @@
 package com.bill.mygitosc.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by liaobb on 2015/7/28.
  */
-public class Commits {
+public class Commits implements Serializable {
     private String id;
     private String message;
     private String timestamp;

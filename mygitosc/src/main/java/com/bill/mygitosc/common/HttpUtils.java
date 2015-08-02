@@ -26,8 +26,18 @@ public class HttpUtils {
     public final static String NOTIFICATION = USER + "notifications/";
     public final static String VERSION = BASE_URL + "app_version/new/android";
 
+
+
     public static String getProjectsURL(String projectType, int page) {
         return PROJECTS + projectType + "?page=" + page;
+    }
+
+    public static String getSelfProjectsURL(int userID, String selfProjectType, int page) {
+        return USER + userID + "/" + selfProjectType + "?page=" + page;
+    }
+
+    public static String getLanguageProjectsURL(String languageID, int page) {
+        return PROJECTS + "languages/" + languageID + "/?page=" + page;
     }
 
     //http://git.oschina.net/api/v3/projects/485581?private_token=LsvU4AMp6PLVvDMMHUZ7
@@ -43,22 +53,16 @@ public class HttpUtils {
         return MYEVENT + "?page=" + page + "&private_token=" + AppContext.getInstance().getSession().getPrivate_token();
     }
 
-    public static String getSelfProjectsURL(int userID, int page) {
-        return USER + userID + "/projects?page=" + page;
-    }
-
-    public static String getSelfOthersProjectURL(int userID, String projectType) {
+    /*public static String getSelfOthersProjectURL(int userID, String projectType) {
         return USER + userID + "/" + projectType;
-    }
+    }*/
 
 
     public static String getLanguageListURL() {
         return PROJECTS + "languages";
     }
 
-    public static String getLanguageURL(int languageID, int page) {
-        return PROJECTS + "languages/" + languageID + "/?page=" + page;
-    }
+
 
     //http://git.oschina.net/api/v3/projects/search/V2ex?page=1
     public static String getSearchProjectURL(String searchKey, int page) {

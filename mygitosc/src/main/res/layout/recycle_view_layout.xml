@@ -4,18 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
-        android:layout_marginTop="10dp"
-        android:id="@+id/recycle_hint_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:padding="10dp"
-        android:text="test"
-        android:textColor="@color/gray"
-        android:textSize="20sp"
-        android:visibility="gone" />
-
     <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/refresher"
         android:layout_width="match_parent"

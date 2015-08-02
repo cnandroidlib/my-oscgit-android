@@ -1,9 +1,11 @@
 package com.bill.mygitosc.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by liaobb on 2015/7/30.
  */
-public class Follow {
+public class Follow implements Serializable {
     private int followers;
     private int starred;
     private int following;

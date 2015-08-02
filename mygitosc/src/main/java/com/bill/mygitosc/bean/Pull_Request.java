@@ -1,9 +1,11 @@
 package com.bill.mygitosc.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by liaobb on 2015/7/28.
  */
-public class Pull_Request {
+public class Pull_Request implements Serializable {
     private int iid;
     private String title;
 

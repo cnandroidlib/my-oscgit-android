@@ -1,6 +1,7 @@
 package com.bill.mygitosc.common;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.bill.mygitosc.R;
 import com.bill.mygitosc.bean.Session;
@@ -10,6 +11,7 @@ import com.bill.mygitosc.bean.Session;
  */
 public class AppContext extends Application {
     public static String TAG = "bill.liao";
+    public static int PAGE_SIZE = 20;
     private int currentTheme;
     private Session session;
     private boolean loginFlag;
@@ -55,5 +57,9 @@ public class AppContext extends Application {
 
     public boolean getLoginFlag() {
         return loginFlag;
+    }
+
+    public static void log(String message) {
+        Log.d(TAG, message);
     }
 }

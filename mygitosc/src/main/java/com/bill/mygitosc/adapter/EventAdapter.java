@@ -14,10 +14,11 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.bill.mygitosc.R;
 import com.bill.mygitosc.bean.Commits;
-import com.bill.mygitosc.bean.SelfEvent;
+import com.bill.mygitosc.bean.Event;
 import com.bill.mygitosc.common.BitmapCache;
 import com.bill.mygitosc.common.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -27,12 +28,21 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
     private ImageLoader mImageLoader;
-    private List<SelfEvent> mDatas;
+    private List<Event> mDatas;
     private Context context;
     //private boolean portraitClickable;
     private boolean noPictureMode;
 
-    public EventAdapter(Context context, List<SelfEvent> mData) {
+    public EventAdapter(Context context){
+        this.context = context;
+        this.mDatas = new ArrayList<>();
+        RequestQueue mQueue = Volley.newRequestQueue(context);
+        mImageLoader = new ImageLoader(mQueue, new BitmapCache());
+        noPictureMode = Utils.checkNoPic(context);
+    }
+
+
+    public EventAdapter(Context context, List<Event> mData) {
         this.context = context;
         this.mDatas = mData;
         RequestQueue mQueue = Volley.newRequestQueue(context);
@@ -48,14 +58,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
     @Override
     public void onBindViewHolder(EventViewHolder holder, int position) {
-        SelfEvent selfEvent = mDatas.get(position);
-        String title = Utils.parseEventTitle(context, selfEvent
-                .getAuthor().getName(), selfEvent.getProject().getOwner().getName()
-                + "/" + selfEvent.getProject().getName(), selfEvent);
+        Event event = mDatas.get(position);
+        String title = Utils.parseEventTitle(context, event
+                .getAuthor().getName(), event.getProject().getOwner().getName()
+                + "/" + event.getProject().getName(), event);
         holder.ev_title.setText(title);
 
-        if (!TextUtils.isEmpty(selfEvent.getUpdated_at())) {
-            String updateTime = Utils.friendlyFormat(context, selfEvent.getUpdated_at());
+        if (!TextUtils.isEmpty(event.getUpdated_at())) {
+            String updateTime = Utils.friendlyFormat(context, event.getUpdated_at());
             if (!TextUtils.isEmpty(updateTime)) {
                 holder.ev_data.setText(updateTime);
             }
@@ -63,8 +73,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
         holder.ev_all_commits_list.setVisibility(View.GONE);
         holder.ev_all_commits_list.removeAllViews();
-        if (selfEvent.getData() != null) {
-            List<Commits> commits = selfEvent.getData().getCommits();
+        if (event.getData() != null) {
+            List<Commits> commits = event.getData().getCommits();
             if (commits != null && commits.size() > 0) {
                 showCommitInfo(holder.ev_all_commits_list, commits);
                 holder.ev_all_commits_list.setVisibility(View.VISIBLE);
@@ -72,7 +82,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         }
 
         if (!noPictureMode) {
-            String portraitURL = selfEvent.getAuthor().getNew_portrait();
+            String portraitURL = event.getAuthor().getNew_portrait();
             if (portraitURL.endsWith("portrait.gif")) {
                 holder.ev_portrait.setImageResource(R.drawable.mini_avatar);
             } else {
@@ -113,12 +123,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         return mDatas.size();
     }
 
-    public void addDataSet(List<SelfEvent> addNewProjectList) {
+    public void addDataSet(List<Event> addNewProjectList) {
         mDatas.addAll(addNewProjectList);
         notifyDataSetChanged();
     }
 
-    public void resetDataSet(List<SelfEvent> newProjectList) {
+    public void resetDataSet(List<Event> newProjectList) {
         mDatas.clear();
         mDatas.addAll(newProjectList);
         notifyDataSetChanged();
