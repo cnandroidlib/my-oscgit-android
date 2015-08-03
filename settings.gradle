@@ -1,1 +1,1 @@
-include ':mygitosc', ':mytest'
+include ':mygitosc'

@@ -38,6 +38,9 @@ public abstract class BaseStateRecyclerAdapter<T> extends BaseRecyclerAdapter<T>
         return super.getItemCount() + 1;
     }
 
+    public int getState() {
+        return state;
+    }
     public void setState(int state) {
         this.state = state;
     }

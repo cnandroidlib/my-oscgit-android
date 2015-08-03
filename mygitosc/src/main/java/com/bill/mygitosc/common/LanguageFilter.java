@@ -5,6 +5,7 @@ import android.widget.Filter;
 
 import com.bill.mygitosc.adapter.LanguageCardAdapter;
 import com.bill.mygitosc.bean.Language;
+import com.bill.mygitosc.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.bill.mygitosc.R;
 import com.bill.mygitosc.bean.Language;
 import com.bill.mygitosc.common.LanguageFilter;
-import com.bill.mygitosc.ui.activity.ViewLanguageProjectActivity;
+import com.bill.mygitosc.ui.ViewLanguageProjectActivity;
 
 import java.util.ArrayList;
 import java.util.List;

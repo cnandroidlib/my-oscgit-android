@@ -16,7 +16,7 @@ import com.bill.mygitosc.R;
 import com.bill.mygitosc.bean.Commits;
 import com.bill.mygitosc.bean.Event;
 import com.bill.mygitosc.common.BitmapCache;
-import com.bill.mygitosc.common.Utils;
+import com.bill.mygitosc.utils.Utils;
 
 import java.util.List;
 
@@ -27,12 +27,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class EventAdapter extends BaseStateRecyclerAdapter<Event> {
     private ImageLoader mImageLoader;
-    private List<Event> mDatas;
-    private Context context;
     //private boolean portraitClickable;
     private boolean noPictureMode;
 
-    public EventAdapter(Context context){
+    public EventAdapter(Context context) {
         super(context);
         RequestQueue mQueue = Volley.newRequestQueue(context);
         mImageLoader = new ImageLoader(mQueue, new BitmapCache());
@@ -41,46 +39,55 @@ public class EventAdapter extends BaseStateRecyclerAdapter<Event> {
 
 
     @Override
-    public EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //return new EventViewHolder(LayoutInflater.from(context).inflate(R.layout.recycleview_event_item_card, parent, false));
-        return new EventViewHolder(LayoutInflater.from(context).inflate(R.layout.recycleview_event_item, parent, false));
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == BaseStateRecyclerAdapter.TYPE_ITEM) {
+            return new EventViewHolder(LayoutInflater.from(context).inflate(R.layout.recycleview_event_item, parent, false));
+        } else {
+            return new FootViewHolder(LayoutInflater.from(context).inflate(R.layout.foot_item, parent, false));
+        }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        EventViewHolder eventHolder=(EventViewHolder)holder;
-        Event event = mDatas.get(position);
-        String title = Utils.parseEventTitle(context, event
-                .getAuthor().getName(), event.getProject().getOwner().getName()
-                + "/" + event.getProject().getName(), event);
-        eventHolder.ev_title.setText(title);
+        if (holder instanceof EventViewHolder) {
+            EventViewHolder eventHolder = (EventViewHolder) holder;
+            Event event = mData.get(position);
+            String title = Utils.parseEventTitle(context, event
+                    .getAuthor().getName(), event.getProject().getOwner().getName()
+                    + "/" + event.getProject().getName(), event);
+            eventHolder.ev_title.setText(title);
 
-        if (!TextUtils.isEmpty(event.getUpdated_at())) {
-            String updateTime = Utils.friendlyFormat(context, event.getUpdated_at());
-            if (!TextUtils.isEmpty(updateTime)) {
-                eventHolder.ev_data.setText(updateTime);
+            if (!TextUtils.isEmpty(event.getUpdated_at())) {
+                String updateTime = Utils.friendlyFormat(context, event.getUpdated_at());
+                if (!TextUtils.isEmpty(updateTime)) {
+                    eventHolder.ev_data.setText(updateTime);
+                }
             }
-        }
 
-        eventHolder.ev_all_commits_list.setVisibility(View.GONE);
-        eventHolder.ev_all_commits_list.removeAllViews();
-        if (event.getData() != null) {
-            List<Commits> commits = event.getData().getCommits();
-            if (commits != null && commits.size() > 0) {
-                showCommitInfo(eventHolder.ev_all_commits_list, commits);
-                eventHolder.ev_all_commits_list.setVisibility(View.VISIBLE);
+            eventHolder.ev_all_commits_list.setVisibility(View.GONE);
+            eventHolder.ev_all_commits_list.removeAllViews();
+            if (event.getData() != null) {
+                List<Commits> commits = event.getData().getCommits();
+                if (commits != null && commits.size() > 0) {
+                    showCommitInfo(eventHolder.ev_all_commits_list, commits);
+                    eventHolder.ev_all_commits_list.setVisibility(View.VISIBLE);
+                }
             }
-        }
 
-        if (!noPictureMode) {
-            String portraitURL = event.getAuthor().getNew_portrait();
-            if (portraitURL.endsWith("portrait.gif")) {
-                eventHolder.ev_portrait.setImageResource(R.drawable.mini_avatar);
-            } else {
-                ImageLoader.ImageListener listener = ImageLoader.getImageListener(eventHolder.ev_portrait,
-                        R.drawable.mini_avatar, R.drawable.mini_avatar);
-                mImageLoader.get(portraitURL, listener);
+            if (!noPictureMode) {
+                String portraitURL = event.getAuthor().getNew_portrait();
+                if (portraitURL.endsWith("portrait.gif")) {
+                    eventHolder.ev_portrait.setImageResource(R.drawable.mini_avatar);
+                } else {
+                    ImageLoader.ImageListener listener = ImageLoader.getImageListener(eventHolder.ev_portrait,
+                            R.drawable.mini_avatar, R.drawable.mini_avatar);
+                    mImageLoader.get(portraitURL, listener);
+                }
             }
+        } else if (holder instanceof FootViewHolder) {
+            FootViewHolder footViewHolder = (FootViewHolder) holder;
+            footViewHolder.foot_hint.setText(getStateDescription());
+            footViewHolder.foot_progressBar.setVisibility(getProgressBarVisiable());
         }
     }
 

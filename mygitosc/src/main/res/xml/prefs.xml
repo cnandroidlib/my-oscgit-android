@@ -10,10 +10,9 @@
             android:key="@string/no_picture_mode_key"
             android:title="@string/no_picture_mode" />
 
-        <!--<com.jenzz.materialpreference.Preference
-            android:key="@string/restore_defaultSettings_key"
-            android:summary="@string/restore_defaultSettings_summary"
-            android:title="@string/restore_defaultSettings" />-->
+        <com.jenzz.materialpreference.Preference
+            android:key="@string/clear_cache_data_key"
+            android:title="@string/clear_cache_data" />
 
     </com.jenzz.materialpreference.PreferenceCategory>
 

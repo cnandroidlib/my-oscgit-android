@@ -146,5 +146,13 @@
     <string name="foot_state_empty">没有更多的数据</string>
     <string name="foot_state_more">正在加载...请稍后</string>
     <string name="foot_state_full">已加载全部数据</string>
+    <string name="clear_cache_data_key">clear_cache_data_key</string>
+    <string name="clear_cache_data">清空缓存</string>
+    <string name="clear_cache_success">缓存清除成功</string>
+    <string name="clear_cache_fail">缓存清除失败</string>
+    <string name="tip_loading">正在加载...</string>
+    <string name="tip_load_error">数据加载失败</string>
+    <string name="tip_load_empty">暂无数据</string>
+    <string name="tip_load_network_error">没有可用网络</string>
 
 </resources>

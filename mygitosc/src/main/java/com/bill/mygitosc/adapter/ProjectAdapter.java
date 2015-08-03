@@ -18,9 +18,9 @@ import com.bill.mygitosc.bean.Project;
 import com.bill.mygitosc.common.AppContext;
 import com.bill.mygitosc.common.BitmapCache;
 import com.bill.mygitosc.common.TypefaceUtils;
-import com.bill.mygitosc.common.Utils;
-import com.bill.mygitosc.ui.activity.ViewProjectInfoActivity;
-import com.bill.mygitosc.ui.activity.ViewSelfInfoActivity;
+import com.bill.mygitosc.utils.Utils;
+import com.bill.mygitosc.ui.ViewProjectInfoActivity;
+import com.bill.mygitosc.ui.ViewSelfInfoActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -115,7 +115,6 @@ public class ProjectAdapter extends BaseStateRecyclerAdapter<Project> {
             FootViewHolder footViewHolder = (FootViewHolder) holder;
             footViewHolder.foot_hint.setText(getStateDescription());
             footViewHolder.foot_progressBar.setVisibility(getProgressBarVisiable());
-            AppContext.log(getStateDescription());
         }
     }
 

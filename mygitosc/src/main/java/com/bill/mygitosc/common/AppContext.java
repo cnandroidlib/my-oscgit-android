@@ -1,6 +1,7 @@
 package com.bill.mygitosc.common;
 
 import android.app.Application;
+import android.os.Build;
 import android.util.Log;
 
 import com.bill.mygitosc.R;
@@ -61,5 +62,10 @@ public class AppContext extends Application {
 
     public static void log(String message) {
         Log.d(TAG, message);
+    }
+
+    public static boolean isMethodsCompat(int versionCode) {
+        int currentVersion = Build.VERSION.SDK_INT;
+        return currentVersion > versionCode;
     }
 }
