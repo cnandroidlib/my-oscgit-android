@@ -3,6 +3,8 @@
 <img src="./screenshot/Screenshot_2.jpeg" width="30%" height="30%">
 <img src="./screenshot/Screenshot_3.jpeg" width="30%" height="30%">
 <img src="./screenshot/Screenshot_4.jpeg" width="30%" height="30%">
+<img src="./screenshot/Screenshot_5.jpeg" width="30%" height="30%">
+<img src="./screenshot/Screenshot_6.jpeg" width="30%" height="30%">
  
 ### Git@OSC非官方android客户端
 本产品是Git@OSC非官方客户端，遵循Material Design设计原则，官方客户端界面实在是丑。
@@ -18,7 +20,6 @@
 ### 下一步更新计划
 - 代码重构
 - 使用自定义view代替materialpreference和circleimageview开源框架
-- 优化recyclerview
 
 ### 引用到的开源库：
 - compile 'com.android.support:design:22.2.0'

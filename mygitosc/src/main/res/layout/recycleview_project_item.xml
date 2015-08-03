@@ -12,8 +12,6 @@
         android:id="@+id/iv_portrait"
         style="@style/UserPortraitStyle"
         android:layout_marginTop="5dp" />
-    <!--app:border_width="2dp"
-    app:border_color="#FF000000"-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,18 +19,12 @@
         android:layout_marginLeft="8dp"
         android:orientation="vertical">
 
-        <!--<RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">-->
-
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textStyle="bold" />
-
-        <!--</RelativeLayout>-->
 
         <TextView
             android:id="@+id/tv_description"
@@ -69,15 +61,10 @@
                 style="@style/project_list_someinfo"
                 android:text="@string/sem_tag" />
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/tv_createtime"
                 style="@style/project_list_someinfo"
-                android:text="@string/unknow_time" />
-            <!--android:layout_width="match_parent"
-                android:gravity="right"
-                android:layout_height="wrap_content"
-                android:textSize="13sp"
-                android:textColor="@color/gray"-->
+                android:text="@string/unknow_time" />-->
 
         </LinearLayout>
     </LinearLayout>

@@ -133,7 +133,7 @@
     <string name="tab_readable_notification">已读通知</string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="project_search_title">项目搜索</string>
-    <string name="search_hint">点此输入搜索关键词</string>
+    <string name="search_project_hint">点此输入搜索关键词</string>
     <string name="gitosc_login_description">在线代码托管平台,服务永久免费</string>
     <string name="account_title">账户：</string>
     <string name="no_content">暂无</string>
@@ -154,5 +154,7 @@
     <string name="tip_load_error">数据加载失败</string>
     <string name="tip_load_empty">暂无数据</string>
     <string name="tip_load_network_error">没有可用网络</string>
+    <string name="search_dialog_title">搜索字符串不能为空，请重新输入</string>
+    <string name="update_head_title">更新于：%s</string>
 
 </resources>

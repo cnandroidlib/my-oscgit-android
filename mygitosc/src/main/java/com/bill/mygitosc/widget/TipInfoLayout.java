@@ -53,7 +53,7 @@ public class TipInfoLayout extends FrameLayout {
     }*/
 
     public void setLoading() {
-        this.setVisibility(VISIBLE);
+        //this.setVisibility(VISIBLE);
         this.mPbProgressBar.setVisibility(View.VISIBLE);
         this.mTvTipState.setVisibility(View.GONE);
         this.mTvTipMsg.setText(context.getString(R.string.tip_loading));
@@ -66,11 +66,21 @@ public class TipInfoLayout extends FrameLayout {
         this.mTvTipMsg.setText(context.getString(R.string.tip_load_network_error));
     }
 
+    public void setLoadError(String message){
+        setLoadError();
+        this.mTvTipMsg.setText(message);
+    }
+
     public void setLoadError() {
         this.mPbProgressBar.setVisibility(View.GONE);
         this.mTvTipState.setVisibility(View.VISIBLE);
         this.mTvTipState.setImageResource(R.drawable.page_icon_loaderror);
         this.mTvTipMsg.setText(context.getString(R.string.tip_load_error));
+    }
+
+    public void setEmptyData(String message){
+        setEmptyData();
+        this.mTvTipMsg.setText(message);
     }
 
     public void setEmptyData() {

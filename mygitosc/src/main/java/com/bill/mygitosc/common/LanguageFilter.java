@@ -5,7 +5,7 @@ import android.widget.Filter;
 
 import com.bill.mygitosc.adapter.LanguageCardAdapter;
 import com.bill.mygitosc.bean.Language;
-import com.bill.mygitosc.utils.Utils;
+import com.bill.mygitosc.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -38,8 +38,7 @@ public class LanguageFilter extends Filter {
             filteredList.addAll(originalList);
         } else {
             for (Language language : originalList) {
-                //if (language.getName().contains(constraint)) {
-                if (Utils.ignoreCaseContain(language.getName(), constraint.toString())) {
+                if (StringUtils.ignoreCaseContain(language.getName(), constraint.toString())) {
                     filteredList.add(language);
                 }
             }
@@ -51,6 +50,6 @@ public class LanguageFilter extends Filter {
 
     @Override
     protected void publishResults(CharSequence constraint, FilterResults results) {
-        adapter.addViewDatasets((ArrayList<Language>) results.values);
+        adapter.resetDataSet((ArrayList<Language>) results.values);
     }
 }

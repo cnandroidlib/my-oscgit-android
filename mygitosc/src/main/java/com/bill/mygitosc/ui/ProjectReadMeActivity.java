@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.Button;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -12,8 +11,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.bill.mygitosc.R;
 import com.bill.mygitosc.bean.ReadMe;
-import com.bill.mygitosc.utils.HttpUtils;
 import com.bill.mygitosc.gson.GsonRequest;
+import com.bill.mygitosc.utils.OscApiUtils;
+import com.bill.mygitosc.widget.TipInfoLayout;
 
 import org.apache.http.protocol.HTTP;
 
@@ -21,10 +21,10 @@ import butterknife.InjectView;
 
 public class ProjectReadMeActivity extends BaseActivity {
 
-    @InjectView(R.id.readme_load_error_button)
-    Button readmeLoadButton;
     @InjectView(R.id.webView)
     WebView webView;
+    @InjectView(R.id.tip_info)
+    TipInfoLayout tipInfoLayout;
 
     public String linkCss = "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/readme_style.css\">";
 
@@ -50,40 +50,50 @@ public class ProjectReadMeActivity extends BaseActivity {
 
     private void loadData() {
         RequestQueue mQueue = Volley.newRequestQueue(this);
-
-        GsonRequest<ReadMe> gsonRequest = new GsonRequest<ReadMe>(HttpUtils.getReadmeURL(projectID), ReadMe.class,
+        GsonRequest<ReadMe> gsonRequest = new GsonRequest<ReadMe>(OscApiUtils.getReadmeURL(projectID), ReadMe.class,
                 new Response.Listener<ReadMe>() {
                     @Override
                     public void onResponse(ReadMe response) {
                         if (response != null && response.getContent() != null) {
-                            webView.setVisibility(View.VISIBLE);
-                            readmeLoadButton.setVisibility(View.GONE);
+                            setWebView(true);
                             String body = linkCss + "<div class='markdown-body'>" + response.getContent() + "</div>";
                             webView.loadDataWithBaseURL(null, body, "text/html", HTTP.UTF_8, null);
                         } else {
-                            webView.setVisibility(View.GONE);
-                            readmeLoadButton.setVisibility(View.VISIBLE);
-                            readmeLoadButton.setText(getString(R.string.no_readme_hint));
+                            setWebView(false);
+                            tipInfoLayout.setEmptyData(getString(R.string.no_readme_hint));
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                webView.setVisibility(View.GONE);
-                readmeLoadButton.setVisibility(View.VISIBLE);
-                readmeLoadButton.setText(getString(R.string.request_data_error_but_hint));
+                setWebView(false);
+                tipInfoLayout.setLoadError(getString(R.string.request_data_error_but_hint));
             }
         });
         mQueue.add(gsonRequest);
     }
 
     private void initView() {
-        readmeLoadButton.setOnClickListener(new View.OnClickListener() {
+        setWebView(false);
+        tipInfoLayout.setLoading();
+        tipInfoLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setWebView(false);
+                tipInfoLayout.setLoading();
                 loadData();
             }
         });
+    }
+
+    private void setWebView(boolean visiable){
+        if(visiable){
+            webView.setVisibility(View.VISIBLE);
+            tipInfoLayout.setVisibility(View.GONE);
+        }else{
+            webView.setVisibility(View.GONE);
+            tipInfoLayout.setVisibility(View.VISIBLE);
+        }
     }
 
 

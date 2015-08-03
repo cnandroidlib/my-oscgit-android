@@ -23,10 +23,10 @@ import com.bill.mygitosc.R;
 import com.bill.mygitosc.bean.Project;
 import com.bill.mygitosc.bean.StarWatchOptionResult;
 import com.bill.mygitosc.common.AppContext;
-import com.bill.mygitosc.utils.HttpUtils;
 import com.bill.mygitosc.common.TypefaceUtils;
-import com.bill.mygitosc.utils.Utils;
 import com.bill.mygitosc.gson.GsonRequest;
+import com.bill.mygitosc.utils.OscApiUtils;
+import com.bill.mygitosc.utils.TimeUtils;
 import com.bill.mygitosc.widget.GridViewForScroll;
 
 import java.util.ArrayList;
@@ -42,6 +42,8 @@ public class ViewProjectInfoActivity extends BaseActivity {
 
     @InjectView(R.id.project_name)
     TextView projectName;
+    @InjectView(R.id.tv_updatetime)
+    TextView projectUpdateTime;
     @InjectView(R.id.project_description)
     TextView projectDescription;
 
@@ -62,8 +64,8 @@ public class ViewProjectInfoActivity extends BaseActivity {
     LinearLayout llstarLinear;
     @InjectView(R.id.ll_watch)
     LinearLayout llwatchLinear;
-    @InjectView(R.id.star_watch_linearlayout)
-    View starWatchLinearLayout;
+    /*@InjectView(R.id.star_watch_linearlayout)
+    View starWatchLinearLayout;*/
 
     @InjectView(R.id.project_code_listview)
     ListView projectCodeListView;
@@ -97,6 +99,7 @@ public class ViewProjectInfoActivity extends BaseActivity {
         initGridview();
 
         projectName.setText(currentProject.getName());
+        projectUpdateTime.setText(getUpdateTime());
         projectDescription.setText(currentProject.getDescription());
         projectStarnum.setText(currentProject.getStars_count() + "");
         projectWatchnum.setText(currentProject.getWatches_count() + "");
@@ -123,10 +126,18 @@ public class ViewProjectInfoActivity extends BaseActivity {
         });
     }
 
+    private String getUpdateTime() {
+        if (currentProject.getLast_push_at() == null) {
+            return getString(R.string.update_head_title, TimeUtils.friendlyFormat(this, currentProject.getCreated_at()));
+        } else {
+            return getString(R.string.update_head_title, TimeUtils.friendlyFormat(this, currentProject.getLast_push_at()));
+        }
+    }
+
     private void initGridview() {
         List<String> mData = new ArrayList<String>();
 
-        mData.add(getString(R.string.fa_clock_o) + " " + Utils.friendlyFormat(this, currentProject.getCreated_at()));
+        mData.add(getString(R.string.fa_clock_o) + " " + TimeUtils.friendlyFormat(this, currentProject.getCreated_at()));
         mData.add(getString(R.string.sem_fork) + " " + currentProject.getForks_count());
         /*mDatas.add(getString(R.string.sem_lock) + " " + "");*/
         String language = currentProject.getLanguage();
@@ -160,8 +171,7 @@ public class ViewProjectInfoActivity extends BaseActivity {
                 view = convertView;
                 viewHolder = (ViewHolder) view.getTag();
             }
-            TypefaceUtils.setIconText(ViewProjectInfoActivity.this, viewHolder.textView, getItem(position));
-            //viewHolder.textView.setText(getItem(position));
+            TypefaceUtils.setIconText(viewHolder.textView, getItem(position));
             return view;
         }
 
@@ -178,7 +188,7 @@ public class ViewProjectInfoActivity extends BaseActivity {
             setStarWatchClickable(false);
             RequestQueue mQueue = Volley.newRequestQueue(this);
 
-            GsonRequest<Project> gsonRequest = new GsonRequest<Project>(HttpUtils.getProjectURl(currentProject.getId()), Project.class,
+            GsonRequest<Project> gsonRequest = new GsonRequest<Project>(OscApiUtils.getProjectURl(currentProject.getId()), Project.class,
                     new Response.Listener<Project>() {
                         @Override
                         public void onResponse(Project response) {
@@ -225,7 +235,7 @@ public class ViewProjectInfoActivity extends BaseActivity {
             textRes = R.string.sem_empty_star;
             projectStarText.setText("star");
         }
-        TypefaceUtils.setIconText(this, projectStarStared, getString(textRes));
+        TypefaceUtils.setIconText(projectStarStared, getString(textRes));
     }
 
     private void setWatched(boolean watched) {
@@ -237,7 +247,7 @@ public class ViewProjectInfoActivity extends BaseActivity {
             textRes = R.string.sem_empty_watch;
             projectWatchText.setText("watch");
         }
-        TypefaceUtils.setIconText(this, projectWatchStared, getString(textRes));
+        TypefaceUtils.setIconText(projectWatchStared, getString(textRes));
     }
 
     @OnClick({R.id.ll_star, R.id.ll_watch})
@@ -268,10 +278,10 @@ public class ViewProjectInfoActivity extends BaseActivity {
         String url;
         if (currentProject.isStared()) {
             message = getString(R.string.unstar_ing_hint);
-            url = HttpUtils.unStarProject(currentProject.getId());
+            url = OscApiUtils.unStarProject(currentProject.getId());
         } else {
             message = getString(R.string.star_ing_hint);
-            url = HttpUtils.starProject(currentProject.getId());
+            url = OscApiUtils.starProject(currentProject.getId());
         }
         mProgressDialog.setMessage(message);
         mProgressDialog.show();
@@ -324,10 +334,10 @@ public class ViewProjectInfoActivity extends BaseActivity {
         String url;
         if (currentProject.isWatched()) {
             message = getString(R.string.unwatch_ing_hint);
-            url = HttpUtils.unWatchProject(currentProject.getId());
+            url = OscApiUtils.unWatchProject(currentProject.getId());
         } else {
             message = getString(R.string.watch_ing_hint);
-            url = HttpUtils.watchProject(currentProject.getId());
+            url = OscApiUtils.watchProject(currentProject.getId());
         }
         mProgressDialog.setMessage(message);
         mProgressDialog.show();

@@ -23,10 +23,9 @@ import com.android.volley.toolbox.Volley;
 import com.bill.mygitosc.R;
 import com.bill.mygitosc.bean.Session;
 import com.bill.mygitosc.common.AppContext;
-import com.bill.mygitosc.utils.CryptUtils;
-import com.bill.mygitosc.utils.HttpUtils;
-import com.bill.mygitosc.utils.Utils;
 import com.bill.mygitosc.gson.GsonRequest;
+import com.bill.mygitosc.utils.CryptUtils;
+import com.bill.mygitosc.utils.OscApiUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -141,13 +140,7 @@ public class LoginActivity extends BaseActivity implements TextView.OnEditorActi
     private void cancelLoginOrNot() {
         if (!TextUtils.isEmpty(userNameInputLayout.getEditText().getText().toString()) &&
                 !TextUtils.isEmpty(passwordInputLayout.getEditText().getText().toString())) {
-            int dialogTheme;
-            if (AppContext.getInstance().getCurrentTheme() == R.style.AppBaseTheme) {
-                dialogTheme = R.style.BlueDialogTheme;
-            } else {
-                dialogTheme = R.style.GreenDialogTheme;
-            }
-            AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogTheme);
+            AlertDialog.Builder builder = generateAlterDialog();
             builder.setTitle(getString(R.string.login_leave_dialog_title)).setPositiveButton(getString(R.string.OK), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -204,7 +197,7 @@ public class LoginActivity extends BaseActivity implements TextView.OnEditorActi
         map.put("email", username);
         map.put("password", passwd);
 
-        GsonRequest<Session> gsonRequest = new GsonRequest<Session>(map, HttpUtils.getLoginURL(), Session.class,
+        GsonRequest<Session> gsonRequest = new GsonRequest<Session>(map, OscApiUtils.getLoginURL(), Session.class,
                 new Response.Listener<Session>() {
                     @Override
                     public void onResponse(Session response) {
@@ -212,7 +205,7 @@ public class LoginActivity extends BaseActivity implements TextView.OnEditorActi
                         editor.putString(getString(R.string.login_username), username).commit();
                         editor.putString(getString(R.string.login_pwd), CryptUtils.encode(CryptUtils.ACCOUNT_PWD, passwd)).commit();
                         mLoginProgressDialog.dismiss();
-                        EventBus.getDefault().post(Utils.LOGIN_SUCCESS_EVNET);
+                        EventBus.getDefault().post(AppContext.LOGIN_SUCCESS_EVNET);
                         LoginActivity.this.finish();
                     }
                 }, new Response.ErrorListener() {

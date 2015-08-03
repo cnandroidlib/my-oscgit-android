@@ -21,11 +21,8 @@ import java.util.List;
 /**
  * Created by liaobb on 2015/7/30.
  */
-public class LanguageCardAdapter extends RecyclerView.Adapter<LanguageCardAdapter.LanguageViewHolder> implements Filterable {
-
-    private List<Language> mData;
+public class LanguageCardAdapter extends BaseRecyclerAdapter<Language> implements Filterable {
     private List<Language> mOriginData;
-    private Context context;
 
     private View.OnClickListener languageClickListener = new View.OnClickListener() {
         @Override
@@ -39,15 +36,9 @@ public class LanguageCardAdapter extends RecyclerView.Adapter<LanguageCardAdapte
     };
 
     public LanguageCardAdapter(Context context) {
-        mData = new ArrayList<Language>();
+        super(context);
         mOriginData = new ArrayList<Language>();
-        this.context = context;
     }
-
-    /*public LanguageCardAdapter(Context context, List<Language> languageList) {
-        this.mDatas = languageList;
-        this.context = context;
-    }*/
 
     @Override
     public Filter getFilter() {
@@ -56,42 +47,28 @@ public class LanguageCardAdapter extends RecyclerView.Adapter<LanguageCardAdapte
 
 
     @Override
-    public LanguageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new LanguageViewHolder(LayoutInflater.from(context).inflate(R.layout.recycleview_language_item, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(LanguageViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Language language = mData.get(position);
-        holder.languageName.setText(language.getName());
-        holder.languageThemeNum.setText(context.getString(R.string.theme_num_hint, language.getProjects_count()));
+        LanguageViewHolder languageHolder = (LanguageViewHolder) holder;
+        languageHolder.languageName.setText(language.getName());
+        languageHolder.languageThemeNum.setText(context.getString(R.string.theme_num_hint, language.getProjects_count()));
 
-        holder.itemView.setTag(language);
-        holder.itemView.setOnClickListener(languageClickListener);
+        languageHolder.itemView.setTag(language);
+        languageHolder.itemView.setOnClickListener(languageClickListener);
     }
 
-    @Override
-    public int getItemCount() {
-        return mData.size();
-    }
-
-    public void addAllDataSets(List<Language> languages) {
-        mData.clear();
-        mData.addAll(languages);
+    public void initLanguageDataSet(List<Language> languages) {
         mOriginData.clear();
         mOriginData.addAll(languages);
-        notifyDataSetChanged();
+        resetDataSet(languages);
     }
-
-    public void addViewDatasets(List<Language> languages){
-        mData.clear();
-        mData.addAll(languages);
-        notifyDataSetChanged();
-    }
-
 
     class LanguageViewHolder extends RecyclerView.ViewHolder {
-
         TextView languageName;
         TextView languageThemeNum;
 

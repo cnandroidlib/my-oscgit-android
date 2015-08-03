@@ -15,7 +15,6 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.bill.mygitosc.R;
 import com.bill.mygitosc.bean.Project;
-import com.bill.mygitosc.common.AppContext;
 import com.bill.mygitosc.common.BitmapCache;
 import com.bill.mygitosc.common.TypefaceUtils;
 import com.bill.mygitosc.utils.Utils;
@@ -29,8 +28,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class ProjectAdapter extends BaseStateRecyclerAdapter<Project> {
     private ImageLoader mImageLoader;
-    //private ImageLoader.ImageListener listener;
-    private boolean portraitClickable;
+    private ImageLoader.ImageListener listener;
     private boolean noPictureMode;
     private RequestQueue mQueue;
 
@@ -50,7 +48,7 @@ public class ProjectAdapter extends BaseStateRecyclerAdapter<Project> {
         super(context);
         mQueue = Volley.newRequestQueue(context);
         mImageLoader = new ImageLoader(mQueue, new BitmapCache());
-        noPictureMode = Utils.checkNoPic(context);
+        noPictureMode = Utils.checkNoPicMode(context);
     }
 
     @Override
@@ -76,23 +74,15 @@ public class ProjectAdapter extends BaseStateRecyclerAdapter<Project> {
             }
             projectHolder.tv_description.setText(description);
 
-            TypefaceUtils.setIconText(context, projectHolder.tv_watch, context.getString(R.string.sem_watch) + " " + project.getWatches_count());
-            TypefaceUtils.setIconText(context, projectHolder.tv_star, context.getString(R.string.sem_star) + " " + project.getStars_count());
-            TypefaceUtils.setIconText(context, projectHolder.tv_fork, context.getString(R.string.sem_fork) + " " + project.getForks_count());
+            TypefaceUtils.setIconText(projectHolder.tv_watch, context.getString(R.string.sem_watch) + " " + project.getWatches_count());
+            TypefaceUtils.setIconText(projectHolder.tv_star, context.getString(R.string.sem_star) + " " + project.getStars_count());
+            TypefaceUtils.setIconText( projectHolder.tv_fork, context.getString(R.string.sem_fork) + " " + project.getForks_count());
 
             String language = project.getLanguage();
             if (TextUtils.isEmpty(language)) {
                 projectHolder.tv_lanuage.setVisibility(View.GONE);
             } else {
-                TypefaceUtils.setIconText(context, projectHolder.tv_lanuage, context.getString(R.string.sem_tag) + " " + project.getLanguage());
-            }
-
-            if (!TextUtils.isEmpty(project.getLast_push_at())) {
-                TypefaceUtils.setIconText(context, projectHolder.tv_createtime, context.getString(R.string.fa_clock_o) + " " +
-                        Utils.friendlyFormat(context, project.getLast_push_at()));
-            } else if (!TextUtils.isEmpty(project.getCreated_at())) {
-                TypefaceUtils.setIconText(context, projectHolder.tv_createtime, context.getString(R.string.fa_clock_o) + " " +
-                        Utils.friendlyFormat(context, project.getCreated_at()));
+                TypefaceUtils.setIconText(projectHolder.tv_lanuage, context.getString(R.string.sem_tag) + " " + project.getLanguage());
             }
 
             projectHolder.setUserID(project.getOwner().getId());
@@ -103,7 +93,7 @@ public class ProjectAdapter extends BaseStateRecyclerAdapter<Project> {
                 if (portraitURL.endsWith("portrait.gif")) {
                     projectHolder.iv_portrait.setImageResource(R.drawable.mini_avatar);
                 } else {
-                    ImageLoader.ImageListener listener = ImageLoader.getImageListener(projectHolder.iv_portrait,
+                    listener = ImageLoader.getImageListener(projectHolder.iv_portrait,
                             R.drawable.mini_avatar, R.drawable.mini_avatar);
                     mImageLoader.get(portraitURL, listener);
                 }
@@ -118,11 +108,6 @@ public class ProjectAdapter extends BaseStateRecyclerAdapter<Project> {
         }
     }
 
-    public void setPortraitClickable(boolean portraitClickable) {
-        this.portraitClickable = portraitClickable;
-    }
-
-
     class ProjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         CircleImageView iv_portrait;
 
@@ -133,7 +118,6 @@ public class ProjectAdapter extends BaseStateRecyclerAdapter<Project> {
         TextView tv_star;
         TextView tv_fork;
         TextView tv_lanuage;
-        TextView tv_createtime;
 
         int userID;
         String userName;
@@ -141,16 +125,13 @@ public class ProjectAdapter extends BaseStateRecyclerAdapter<Project> {
         public ProjectViewHolder(View itemView) {
             super(itemView);
             iv_portrait = (CircleImageView) itemView.findViewById(R.id.iv_portrait);
-            if (portraitClickable) {
-                iv_portrait.setOnClickListener(this);
-            }
+            iv_portrait.setOnClickListener(this);
             tv_title = (TextView) itemView.findViewById(R.id.tv_title);
             tv_description = (TextView) itemView.findViewById(R.id.tv_description);
             tv_watch = (TextView) itemView.findViewById(R.id.tv_watch);
             tv_star = (TextView) itemView.findViewById(R.id.tv_star);
             tv_fork = (TextView) itemView.findViewById(R.id.tv_fork);
             tv_lanuage = (TextView) itemView.findViewById(R.id.tv_language);
-            tv_createtime = (TextView) itemView.findViewById(R.id.tv_createtime);
         }
 
         public void setUserID(int userID) {

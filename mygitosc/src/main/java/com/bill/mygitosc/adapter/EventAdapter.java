@@ -16,6 +16,8 @@ import com.bill.mygitosc.R;
 import com.bill.mygitosc.bean.Commits;
 import com.bill.mygitosc.bean.Event;
 import com.bill.mygitosc.common.BitmapCache;
+import com.bill.mygitosc.utils.EventUtils;
+import com.bill.mygitosc.utils.TimeUtils;
 import com.bill.mygitosc.utils.Utils;
 
 import java.util.List;
@@ -27,14 +29,28 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class EventAdapter extends BaseStateRecyclerAdapter<Event> {
     private ImageLoader mImageLoader;
-    //private boolean portraitClickable;
     private boolean noPictureMode;
+    private ImageLoader.ImageListener listener;
+
+   /* private View.OnClickListener eventClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Event event = (Event) v.getTag();
+            if(event.getEvents().getIssue()==null){
+                Intent intent = new Intent(context, ViewProjectInfoActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(ViewProjectInfoActivity.VIEW_PROJECT_INFO, event.getProject());
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+            }
+        }
+    };*/
 
     public EventAdapter(Context context) {
         super(context);
         RequestQueue mQueue = Volley.newRequestQueue(context);
         mImageLoader = new ImageLoader(mQueue, new BitmapCache());
-        noPictureMode = Utils.checkNoPic(context);
+        noPictureMode = Utils.checkNoPicMode(context);
     }
 
 
@@ -52,13 +68,13 @@ public class EventAdapter extends BaseStateRecyclerAdapter<Event> {
         if (holder instanceof EventViewHolder) {
             EventViewHolder eventHolder = (EventViewHolder) holder;
             Event event = mData.get(position);
-            String title = Utils.parseEventTitle(context, event
+            String title = EventUtils.parseEventTitle(context, event
                     .getAuthor().getName(), event.getProject().getOwner().getName()
                     + "/" + event.getProject().getName(), event);
             eventHolder.ev_title.setText(title);
 
             if (!TextUtils.isEmpty(event.getUpdated_at())) {
-                String updateTime = Utils.friendlyFormat(context, event.getUpdated_at());
+                String updateTime = TimeUtils.friendlyFormat(context, event.getUpdated_at());
                 if (!TextUtils.isEmpty(updateTime)) {
                     eventHolder.ev_data.setText(updateTime);
                 }
@@ -79,11 +95,15 @@ public class EventAdapter extends BaseStateRecyclerAdapter<Event> {
                 if (portraitURL.endsWith("portrait.gif")) {
                     eventHolder.ev_portrait.setImageResource(R.drawable.mini_avatar);
                 } else {
-                    ImageLoader.ImageListener listener = ImageLoader.getImageListener(eventHolder.ev_portrait,
+                    listener = ImageLoader.getImageListener(eventHolder.ev_portrait,
                             R.drawable.mini_avatar, R.drawable.mini_avatar);
                     mImageLoader.get(portraitURL, listener);
                 }
             }
+
+//            eventHolder.itemView.setTag(event);
+//            eventHolder.itemView.setOnClickListener(eventClickListener);
+
         } else if (holder instanceof FootViewHolder) {
             FootViewHolder footViewHolder = (FootViewHolder) holder;
             footViewHolder.foot_hint.setText(getStateDescription());
@@ -123,19 +143,14 @@ public class EventAdapter extends BaseStateRecyclerAdapter<Event> {
         TextView ev_title;
         TextView ev_description;
         LinearLayout ev_all_commits_list;
-        //TextView ev_client;
         TextView ev_data;
 
         public EventViewHolder(View itemView) {
             super(itemView);
             ev_portrait = (CircleImageView) itemView.findViewById(R.id.event_portrait);
-            /*if (portraitClickable) {
-                iv_portrait.setOnClickListener(this);
-            }*/
             ev_title = (TextView) itemView.findViewById(R.id.event_title);
             ev_description = (TextView) itemView.findViewById(R.id.event_description);
             ev_all_commits_list = (LinearLayout) itemView.findViewById(R.id.event_all_commits_list);
-            //ev_client = (TextView) itemView.findViewById(R.id.event_client);
             ev_data = (TextView) itemView.findViewById(R.id.event_date);
         }
     }

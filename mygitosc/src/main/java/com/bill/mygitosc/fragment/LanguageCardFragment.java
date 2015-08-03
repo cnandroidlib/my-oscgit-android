@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -29,8 +30,9 @@ import com.bill.mygitosc.adapter.LanguageCardAdapter;
 import com.bill.mygitosc.bean.Language;
 import com.bill.mygitosc.cache.CacheManager;
 import com.bill.mygitosc.common.AppContext;
-import com.bill.mygitosc.utils.HttpUtils;
+import com.bill.mygitosc.utils.OscApiUtils;
 import com.bill.mygitosc.ui.BaseActivity;
+import com.bill.mygitosc.widget.TipInfoLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -47,6 +49,7 @@ public class LanguageCardFragment extends Fragment implements SwipeRefreshLayout
     private SearchView searchView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
+    private TipInfoLayout tipInfoLayout;
     private LanguageCardAdapter languageCardAdapter;
 
     @Override
@@ -59,6 +62,9 @@ public class LanguageCardFragment extends Fragment implements SwipeRefreshLayout
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.language_recycleview_layout, container, false);
+
+        tipInfoLayout = (TipInfoLayout) view.findViewById(R.id.tip_info);
+        tipInfoLayout.setVisibility(View.GONE);
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresher);
         if (getActivity() instanceof BaseActivity) {
@@ -76,34 +82,38 @@ public class LanguageCardFragment extends Fragment implements SwipeRefreshLayout
     }
 
     private void requestData(boolean refreshFlag) {
+        swipeRefreshLayout.setEnabled(false);
         if (refreshFlag) {
-            swipeRefreshLayout.setEnabled(false);
-
             RequestQueue mQueue = Volley.newRequestQueue(getActivity());
             final Gson gson = new Gson();
-
-            Log.d(AppContext.TAG, HttpUtils.getLanguageListURL());
-
-            StringRequest stringRequest = new StringRequest(HttpUtils.getLanguageListURL(),
+            StringRequest stringRequest = new StringRequest(OscApiUtils.getLanguageListURL(),
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             List<Language> newLanguageList = gson.fromJson(response, new TypeToken<List<Language>>() {
                             }.getType());
-                            languageCardAdapter.addAllDataSets(newLanguageList);
-                            setSwipeRefreshLayout(false);
+                            languageCardAdapter.initLanguageDataSet(newLanguageList);
+                            setSwipeRefreshLoadedState();
                             new SaveCacheTask(getActivity(), (Serializable) newLanguageList, LANGUAGE_CACHE_KEY).execute();
+                            tipInfoLayout.setVisibility(View.GONE);
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Log.d(AppContext.TAG, "language error");
-                            setSwipeRefreshLayout(false);
+                            setSwipeRefreshLoadedState();
+                            if (languageCardAdapter.getItemCount() == 0) {
+                                tipInfoLayout.setVisibility(View.VISIBLE);
+                                tipInfoLayout.setLoadError();
+                            } else {
+                                Toast.makeText(getActivity(), getString(R.string.request_data_error_hint), Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
             mQueue.add(stringRequest);
         } else {
+            tipInfoLayout.setVisibility(View.VISIBLE);
+            tipInfoLayout.setLoading();
             new ReadCacheTask(getActivity()).execute(LANGUAGE_CACHE_KEY);
         }
     }
@@ -121,9 +131,7 @@ public class LanguageCardFragment extends Fragment implements SwipeRefreshLayout
 
     private void initSearchView(MenuItem searchItem) {
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        //searchView.setSubmitButtonEnabled(true);//是否显示确认搜索按钮
-        //searchView.setIconified(false);
-        searchView.setIconifiedByDefault(false);//设置展开后图标的样式,这里只有两种,一种图标在搜索框外,一种在搜索框内
+        searchView.setIconifiedByDefault(false);
 
         searchView.setQueryHint(getString(R.string.search_language_hint));
         SearchView.SearchAutoComplete textView = (SearchView.SearchAutoComplete) searchView.findViewById(R.id.search_src_text);
@@ -149,26 +157,25 @@ public class LanguageCardFragment extends Fragment implements SwipeRefreshLayout
         requestData(true);
     }
 
-    private void setSwipeRefreshLayout(boolean result) {
-        if (result) {
-            swipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    swipeRefreshLayout.setRefreshing(true);
-                    swipeRefreshLayout.setEnabled(false);
-                }
-            });
+    private void setSwipeRefreshLoadedState() {
+        swipeRefreshLayout.setRefreshing(false);
+        swipeRefreshLayout.setEnabled(true);
+    }
+
+    private void readCacheListSuccess(Serializable list) {
+        if (list == null) {
+            requestData(true);
         } else {
-            swipeRefreshLayout.setRefreshing(false);
-            swipeRefreshLayout.setEnabled(true);
+            List<Language> languages = (List<Language>) list;
+            if (languages.size() == 0) {
+                requestData(true);
+            } else {
+                swipeRefreshLayout.setEnabled(true);
+                tipInfoLayout.setVisibility(View.GONE);
+                languageCardAdapter.initLanguageDataSet(languages);
+            }
         }
     }
-
-    private void executeOnLoadDataSuccess(Serializable list) {
-        List<Language> languages = (List<Language>) list;
-        languageCardAdapter.addAllDataSets(languages);
-    }
-
 
     private class SaveCacheTask extends AsyncTask<Void, Void, Void> {
         private final WeakReference<Context> mContext;
@@ -210,9 +217,9 @@ public class LanguageCardFragment extends Fragment implements SwipeRefreshLayout
         protected void onPostExecute(Serializable list) {
             super.onPostExecute(list);
             if (list != null) {
-                executeOnLoadDataSuccess(list);
+                readCacheListSuccess(list);
             } else {
-                //executeOnLoadDataError(null);
+                readCacheListSuccess(null);
             }
         }
     }

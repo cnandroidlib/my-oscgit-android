@@ -3,7 +3,7 @@ package com.bill.mygitosc.ui;
 import android.os.Bundle;
 
 import com.bill.mygitosc.R;
-import com.bill.mygitosc.fragment.ProjectsRefreshFragment;
+import com.bill.mygitosc.fragment.LanguageProjectFragment;
 
 public class ViewLanguageProjectActivity extends BaseActivity {
     public static String LANGUAGE_ID = "language_id";
@@ -21,7 +21,7 @@ public class ViewLanguageProjectActivity extends BaseActivity {
         toolbar.setTitle(languageName + getString(R.string.language_project_title));
 
         getSupportFragmentManager().beginTransaction().replace(R.id.main_content,
-                ProjectsRefreshFragment.newInstance(-1, String.valueOf(languageID)), null).commit();
+                LanguageProjectFragment.newInstance(languageID), null).commit();
     }
 
     @Override

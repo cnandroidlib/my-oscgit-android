@@ -11,6 +11,7 @@ import com.bill.mygitosc.bean.Session;
  * Created by liaobb on 2015/7/22.
  */
 public class AppContext extends Application {
+    public static final int LOGIN_SUCCESS_EVNET = 0;
     public static String TAG = "bill.liao";
     public static int PAGE_SIZE = 20;
     private int currentTheme;

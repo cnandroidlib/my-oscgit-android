@@ -44,15 +44,22 @@ public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements Sw
     private int lastVisiableItem;
     private int currentPage;
 
-    private StringRequest listRequest;
-
     private boolean requestingFlag;
+    private boolean refreshingFlag;
+
+    private RequestQueue mQueue;
+    private Gson gson;
+    private StringRequest listRequest;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currentPage = 0;
         requestingFlag = false;
+        refreshingFlag = false;
+
+        gson = new Gson();
+        mQueue = Volley.newRequestQueue(getActivity());
     }
 
     @Override
@@ -114,7 +121,6 @@ public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements Sw
     }
 
     private void requestData(int page, boolean refreshFlag) {
-        AppContext.log("requestData type:" + getItemType() + " page:" + page + " refreshFlag:" + refreshFlag);
         swipeRefreshLayout.setEnabled(false);
         if (requestingFlag) {
             return;
@@ -146,7 +152,6 @@ public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements Sw
             AppContext.log("requestDataFromCache " + cacheKey);
             requestDataFromCache(cacheKey);
         } else {
-            AppContext.log("requestDataFromNetwork " + getItemType() + " page:" + page);
             requestDataFromNetwork(page);
         }
     }
@@ -166,10 +171,7 @@ public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements Sw
     }
 
     private void requestDataFromNetwork(final int page) {
-        RequestQueue mQueue = Volley.newRequestQueue(getActivity());
-        final Gson gson = new Gson();
-        AppContext.log(getItemURL(page));
-
+        AppContext.log("requestDataFromNetwork:" + getItemURL(page));
         listRequest = new StringRequest(getItemURL(page),
                 new Response.Listener<String>() {
                     @Override
@@ -190,7 +192,7 @@ public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements Sw
 
     @Override
     public void onRefresh() {
-        //currentPage = 0;
+        refreshingFlag = true;
         swipeRefreshLayout.setEnabled(false);
         requestData(1, true);
     }
@@ -250,7 +252,6 @@ public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements Sw
             return;
         }
         List<T> list = (List<T>) serializable;
-        AppContext.log("readCacheListSuccess " + getItemType() + " num:" + list.size());
         if (list.size() == 0) {
             requestingFlag = false;
             requestData(currentPage + 1, true);
@@ -292,10 +293,19 @@ public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements Sw
                         //Toast.makeText(getActivity(), ("add " + list.size() + " item"), 500).show();
                     }
                 } else {
-                    mDataAdapter.setState(BaseStateRecyclerAdapter.STATE_MORE);
-                    mDataAdapter.addDataSetToEnd(list);
+                    if (mDataAdapter.getItemCount() > AppContext.PAGE_SIZE) {
+                        if (list.size() < AppContext.PAGE_SIZE) {
+                            mDataAdapter.setState(BaseStateRecyclerAdapter.STATE_FULL);
+                            mDataAdapter.addDataSetToEnd(list);
+                        } else {
+                            mDataAdapter.setState(BaseStateRecyclerAdapter.STATE_MORE);
+                            mDataAdapter.addDataSetToEnd(list);
+                        }
+                    } else {
+                        mDataAdapter.resetDataSet(list);
+                    }
                 }
-                if (!swipeRefreshLayout.isRefreshing() && list.size() == AppContext.PAGE_SIZE) {
+                if (!refreshingFlag) {
                     currentPage++;
                 }
                 new SaveCacheTask(getActivity(), (Serializable) list, getCacheKey() + currentPage).execute();
@@ -310,6 +320,7 @@ public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements Sw
                 }
             }
         }
+        refreshingFlag = false;
         swipeRefreshLayout.setEnabled(true);
 
         if (swipeRefreshLayout.isRefreshing()) {
@@ -328,7 +339,7 @@ public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements Sw
     }
 
     private boolean checkReLoadingAbility() {
-        return mDataAdapter.getItemCount() == AppContext.PAGE_SIZE + 1 && (mDataAdapter.getState() == BaseStateRecyclerAdapter.STATE_MORE ||
+        return mDataAdapter.getItemCount() >= AppContext.PAGE_SIZE + 1 && (mDataAdapter.getState() == BaseStateRecyclerAdapter.STATE_MORE ||
                 mDataAdapter.getState() == BaseStateRecyclerAdapter.STATE_ERROR);
     }
 
@@ -347,8 +358,6 @@ public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements Sw
     protected abstract BaseStateRecyclerAdapter getRecyclerAdapter();
 
     protected abstract String getItemURL(int page);
-
-    protected abstract String getItemType();
 
     protected abstract java.lang.reflect.Type getGsonArrayType();
 }

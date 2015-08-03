@@ -1,6 +1,5 @@
 package com.bill.mygitosc.common;
 
-import android.content.Context;
 import android.graphics.Typeface;
 import android.widget.TextView;
 
@@ -10,15 +9,15 @@ import android.widget.TextView;
 public class TypefaceUtils {
     private static Typeface typeface;
 
-    private static Typeface getTypeface(Context context) {
+    private static Typeface getTypeface() {
         if (typeface == null) {
-            typeface = Typeface.createFromAsset(context.getAssets(), "icons.ttf");
+            typeface = Typeface.createFromAsset(AppContext.getInstance().getAssets(), "icons.ttf");
         }
         return typeface;
     }
 
-    public static void setIconText(Context context, TextView tv_watch, String text) {
+    public static void setIconText(TextView tv_watch, String text) {
         tv_watch.setText(text);
-        tv_watch.setTypeface(TypefaceUtils.getTypeface(context));
+        tv_watch.setTypeface(TypefaceUtils.getTypeface());
     }
 }

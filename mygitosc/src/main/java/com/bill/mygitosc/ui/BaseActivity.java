@@ -3,6 +3,7 @@ package com.bill.mygitosc.ui;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -55,6 +56,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         } else {
             return getResources().getColor(R.color.green);
         }
+    }
+
+    public AlertDialog.Builder generateAlterDialog() {
+        int dialogTheme;
+        if (AppContext.getInstance().getCurrentTheme() == R.style.AppBaseTheme) {
+            dialogTheme = R.style.BlueDialogTheme;
+        } else {
+            dialogTheme = R.style.GreenDialogTheme;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogTheme);
+        return builder;
     }
 
     @Override

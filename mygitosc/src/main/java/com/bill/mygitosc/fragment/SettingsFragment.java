@@ -19,7 +19,7 @@ import com.bill.mygitosc.R;
 import com.bill.mygitosc.cache.DataCleanManager;
 import com.bill.mygitosc.common.AppContext;
 import com.bill.mygitosc.ui.SettingActivity;
-import com.bill.mygitosc.utils.FileUtil;
+import com.bill.mygitosc.utils.FileUtils;
 import com.jenzz.materialpreference.CheckBoxPreference;
 import com.jenzz.materialpreference.Preference;
 import com.jenzz.materialpreference.SwitchPreference;
@@ -98,15 +98,15 @@ public class SettingsFragment extends PreferenceFragment {
         File filesDir = getActivity().getFilesDir();
         File cacheDir = getActivity().getCacheDir();
 
-        fileSize += FileUtil.getDirSize(filesDir);
-        fileSize += FileUtil.getDirSize(cacheDir);
+        fileSize += FileUtils.getDirSize(filesDir);
+        fileSize += FileUtils.getDirSize(cacheDir);
         // 2.2版本才有将应用缓存转移到sd卡的功能
         if (AppContext.isMethodsCompat(android.os.Build.VERSION_CODES.FROYO)) {
             File externalCacheDir = getActivity().getExternalCacheDir();
-            fileSize += FileUtil.getDirSize(externalCacheDir);
+            fileSize += FileUtils.getDirSize(externalCacheDir);
         }
         if (fileSize > 0)
-            cacheSize = FileUtil.formatFileSize(fileSize);
+            cacheSize = FileUtils.formatFileSize(fileSize);
         clearCachePreference.setSummary(cacheSize);
     }
 

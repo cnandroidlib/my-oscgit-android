@@ -30,7 +30,7 @@ import com.android.volley.toolbox.Volley;
 import com.bill.mygitosc.R;
 import com.bill.mygitosc.bean.Project;
 import com.bill.mygitosc.common.BitmapCache;
-import com.bill.mygitosc.utils.HttpUtils;
+import com.bill.mygitosc.utils.OscApiUtils;
 import com.bill.mygitosc.common.ShakeListener;
 import com.bill.mygitosc.common.TypefaceUtils;
 import com.bill.mygitosc.utils.Utils;
@@ -184,7 +184,7 @@ public class ShakeFragment extends Fragment {
     private void loadProject() {
         beforeLoading();
         final RequestQueue mQueue = Volley.newRequestQueue(getActivity());
-        GsonRequest<Project> gsonRequest = new GsonRequest<Project>(HttpUtils.getRomProjectURL(), Project.class,
+        GsonRequest<Project> gsonRequest = new GsonRequest<Project>(OscApiUtils.getRomProjectURL(), Project.class,
                 new Response.Listener<Project>() {
                     @Override
                     public void onResponse(Project response) {
@@ -198,17 +198,17 @@ public class ShakeFragment extends Fragment {
                             }
                             mProjectDescription.setText(description);
 
-                            TypefaceUtils.setIconText(getActivity(), mProjectStarNums, getString(R.string.sem_watch) + " " + mProject.getWatches_count());
-                            TypefaceUtils.setIconText(getActivity(), mProjectForkNums, getString(R.string.sem_star) + " " + mProject.getStars_count());
-                            TypefaceUtils.setIconText(getActivity(), mProjectWatchNums, getString(R.string.sem_fork) + " " + mProject.getForks_count());
+                            TypefaceUtils.setIconText( mProjectStarNums, getString(R.string.sem_watch) + " " + mProject.getWatches_count());
+                            TypefaceUtils.setIconText( mProjectForkNums, getString(R.string.sem_star) + " " + mProject.getStars_count());
+                            TypefaceUtils.setIconText( mProjectWatchNums, getString(R.string.sem_fork) + " " + mProject.getForks_count());
 
                             String language = mProject.getLanguage();
                             if (TextUtils.isEmpty(language)) {
                                 mProjectLanguage.setVisibility(View.GONE);
                             } else {
-                                TypefaceUtils.setIconText(getActivity(), mProjectLanguage, getString(R.string.sem_tag) + " " + mProject.getLanguage());
+                                TypefaceUtils.setIconText(mProjectLanguage, getString(R.string.sem_tag) + " " + mProject.getLanguage());
                             }
-                            if (!Utils.checkNoPic(getActivity())) {
+                            if (!Utils.checkNoPicMode(getActivity())) {
                                 ImageLoader.ImageListener listener = ImageLoader.getImageListener(mProjectFace,
                                         R.drawable.mini_avatar, R.drawable.mini_avatar);
                                 ImageLoader mImageLoader = new ImageLoader(mQueue, new BitmapCache());

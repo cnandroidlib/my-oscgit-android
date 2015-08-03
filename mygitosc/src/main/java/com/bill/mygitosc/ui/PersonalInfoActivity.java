@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.bill.mygitosc.R;
 import com.bill.mygitosc.bean.Session;
 import com.bill.mygitosc.common.AppContext;
-import com.bill.mygitosc.utils.HttpUtils;
+import com.bill.mygitosc.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +53,7 @@ public class PersonalInfoActivity extends BaseActivity {
             usedescription.setText(getString(R.string.no_content));
         }
 
-        HttpUtils.getPorTraitFormURL(this, protrait, currentSession.getNew_portrait());
+        Utils.getPorTraitFormURL(this, protrait, currentSession.getNew_portrait());
     }
 
     private void initOtherInfo() {

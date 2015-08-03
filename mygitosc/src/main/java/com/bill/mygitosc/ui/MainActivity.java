@@ -25,7 +25,7 @@ import com.bill.mygitosc.bean.Session;
 import com.bill.mygitosc.common.AppContext;
 import com.bill.mygitosc.utils.CryptUtils;
 import com.bill.mygitosc.common.DoubleClickExitHelper;
-import com.bill.mygitosc.utils.HttpUtils;
+import com.bill.mygitosc.utils.OscApiUtils;
 import com.bill.mygitosc.utils.Utils;
 import com.bill.mygitosc.gson.GsonRequest;
 import com.bill.mygitosc.fragment.FindInfoTabFragment;
@@ -187,13 +187,13 @@ public class MainActivity extends BaseActivity {
             map.put("email", username);
             map.put("password", pwd);
 
-            GsonRequest<Session> gsonRequest = new GsonRequest<Session>(map, HttpUtils.getLoginURL(), Session.class,
+            GsonRequest<Session> gsonRequest = new GsonRequest<Session>(map, OscApiUtils.getLoginURL(), Session.class,
                     new Response.Listener<Session>() {
                         @Override
                         public void onResponse(Session response) {
                             AppContext.getInstance().setSession(response);
                             userNameTextView.setText(response.getName());
-                            HttpUtils.getPorTraitFormURL(MainActivity.this, myPortrait, response.getNew_portrait());
+                            Utils.getPorTraitFormURL(MainActivity.this, myPortrait, response.getNew_portrait());
                             myPortrait.setClickable(true);
                         }
                     }, new Response.ErrorListener() {
@@ -224,13 +224,7 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_about:
-                int dialogTheme;
-                if (AppContext.getInstance().getCurrentTheme() == R.style.AppBaseTheme) {
-                    dialogTheme = R.style.BlueDialogTheme;
-                } else {
-                    dialogTheme = R.style.GreenDialogTheme;
-                }
-                AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogTheme);
+                AlertDialog.Builder builder = generateAlterDialog();
                 builder.setTitle(getString(R.string.about_dialog_title)).setMessage(R.string.about_dialog_message)
                         .setPositiveButton(getString(R.string.OK), new DialogInterface.OnClickListener() {
                             @Override
@@ -307,11 +301,11 @@ public class MainActivity extends BaseActivity {
     public void onEvent(Integer event) {
         Log.d(AppContext.TAG, "onEvent");
         switch (event) {
-            case Utils.LOGIN_SUCCESS_EVNET:
+            case AppContext.LOGIN_SUCCESS_EVNET:
                 Session session = AppContext.getInstance().getSession();
                 Log.d(AppContext.TAG, session.getName());
                 userNameTextView.setText(session.getName());
-                HttpUtils.getPorTraitFormURL(this, myPortrait, session.getNew_portrait());
+                Utils.getPorTraitFormURL(this, myPortrait, session.getNew_portrait());
                 break;
             default:
                 break;

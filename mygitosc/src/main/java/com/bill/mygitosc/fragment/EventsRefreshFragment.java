@@ -6,7 +6,7 @@ import com.bill.mygitosc.adapter.BaseStateRecyclerAdapter;
 import com.bill.mygitosc.adapter.EventAdapter;
 import com.bill.mygitosc.bean.Event;
 import com.bill.mygitosc.common.AppContext;
-import com.bill.mygitosc.utils.HttpUtils;
+import com.bill.mygitosc.utils.OscApiUtils;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -38,10 +38,10 @@ public class EventsRefreshFragment extends BaseSwipeRefreshFragment<Event> {
         return false;
     }
 
-    @Override
+    /*@Override
     protected String getItemType() {
         return "event";
-    }
+    }*/
 
     @Override
     protected Type getGsonArrayType() {
@@ -67,9 +67,9 @@ public class EventsRefreshFragment extends BaseSwipeRefreshFragment<Event> {
     @Override
     protected String getItemURL(int page) {
         if (AppContext.getInstance().getSession() != null && userID == AppContext.getInstance().getSession().getId()) {
-            return HttpUtils.getMySelfEventURL(page);
+            return OscApiUtils.getMySelfEventURL(page);
         }
-        return HttpUtils.getSelfEventURL(userID, page);
+        return OscApiUtils.getSelfEventURL(userID, page);
     }
 
 

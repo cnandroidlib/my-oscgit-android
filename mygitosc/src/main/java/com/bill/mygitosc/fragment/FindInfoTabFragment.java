@@ -3,7 +3,7 @@ package com.bill.mygitosc.fragment;
 import android.support.v4.app.Fragment;
 
 import com.bill.mygitosc.R;
-import com.bill.mygitosc.utils.Utils.ProjectType;
+import com.bill.mygitosc.common.ProjectType;
 
 import java.util.List;
 
@@ -15,12 +15,12 @@ public class FindInfoTabFragment extends BaseTabViewpageFragment {
     protected void initViewpagerFragmentList(List<Fragment> viewpagerFragmentList, List<String> mTitles) {
 
         mTitles.add(getString(R.string.tab_find_featured_project));
-        viewpagerFragmentList.add(ProjectsRefreshFragment.newInstance(-1, ProjectType.FeaturedProject.getProjectType()));
+        viewpagerFragmentList.add(AllProjectFragment.newInstance(ProjectType.FeaturedProject));
 
         mTitles.add(getString(R.string.tab_find_popular_project));
-        viewpagerFragmentList.add(ProjectsRefreshFragment.newInstance(-1, ProjectType.PopularProject.getProjectType()));
+        viewpagerFragmentList.add(AllProjectFragment.newInstance(ProjectType.PopularProject));
 
         mTitles.add(getString(R.string.tab_find_latest_project));
-        viewpagerFragmentList.add(ProjectsRefreshFragment.newInstance(-1, ProjectType.LatestProject.getProjectType()));
+        viewpagerFragmentList.add(AllProjectFragment.newInstance(ProjectType.LatestProject));
     }
 }
