@@ -43,7 +43,7 @@ public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements Sw
     private int currentPage;
 
     private StringRequest listRequest;
-    private boolean requestingFlag;
+    //private boolean requestingFlag;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,9 +83,10 @@ public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements Sw
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     if (lastVisiableItem + 1 == mDataAdapter.getItemCount()) {
-                        if (!requestingFlag) {
-                            requestData(currentPage + 1, false);
-                        }
+                        //if (!requestingFlag) {
+                        requestData(currentPage + 1, false);
+
+                        //}
                     }
                 }
             }
@@ -100,17 +101,17 @@ public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements Sw
     }
 
     private void requestData(int page, boolean refreshFlag) {
-        requestingFlag = true;
+        //requestingFlag = true;
         if (mDataAdapter.getItemCount() != 0) {
-            if(refreshFlag){
+            if (refreshFlag) {
                 mDataAdapter.setState(BaseStateRecyclerAdapter.STATE_FULL);
                 mDataAdapter.notifyDataSetChanged();
-            }else{
+            } else {
                 mDataAdapter.setState(BaseStateRecyclerAdapter.STATE_MORE);
                 mDataAdapter.notifyDataSetChanged();
             }
 
-        }else{
+        } else {
 
         }
         String cacheKey = getCacheKey() + page;
@@ -163,11 +164,11 @@ public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements Sw
 
     @Override
     public void onRefresh() {
-        if (!requestingFlag) {
+        //if (!requestingFlag) {
             currentPage = 0;
             requestData(currentPage + 1, true);
             swipeRefreshLayout.setEnabled(false);
-        }
+        //}
     }
 
     private class SaveCacheTask extends AsyncTask<Void, Void, Void> {
@@ -237,7 +238,7 @@ public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements Sw
             swipeRefreshLayout.setRefreshing(false);
             swipeRefreshLayout.setEnabled(true);
         }
-        requestingFlag = false;
+        //requestingFlag = false;
 
         if (list == null) {
             Toast.makeText(getActivity(), getString(R.string.request_data_error_hint), 500).show();

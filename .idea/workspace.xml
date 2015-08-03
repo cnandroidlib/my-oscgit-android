@@ -36,21 +36,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="BaseSwipeRefreshFragment.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="BaseSwipeRefreshFragment.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mygitosc/src/main/java/com/bill/mygitosc/ui/base/BaseSwipeRefreshFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="105" column="73" selection-start-line="105" selection-start-column="73" selection-end-line="105" selection-end-column="73" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LoginActivity.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/mygitosc/src/main/java/com/bill/mygitosc/ui/activity/LoginActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.63819873">
-              <caret line="104" column="31" selection-start-line="104" selection-start-column="12" selection-end-line="104" selection-end-column="31" />
+            <state vertical-scroll-proportion="0.44720498">
+              <caret line="166" column="32" selection-start-line="166" selection-start-column="32" selection-end-line="166" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -2201,7 +2191,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/mygitosc/src/main/java/com/bill/mygitosc/ui/activity/ViewLanguageProjectActivity.java" />
         <option value="$PROJECT_DIR$/mygitosc/src/main/java/com/bill/mygitosc/ui/fragment/LanguageCardFragment.java" />
         <option value="$PROJECT_DIR$/mygitosc/src/main/java/com/bill/mygitosc/bean/SelfEvent.java" />
         <option value="$PROJECT_DIR$/mygitosc/src/main/java/com/bill/mygitosc/ui/fragment/SelfEventsRefreshFragment.java" />
@@ -2250,8 +2239,9 @@
         <option value="$PROJECT_DIR$/mygitosc/src/main/java/com/bill/mygitosc/adapter/FootViewHolder.java" />
         <option value="$PROJECT_DIR$/mygitosc/src/main/java/com/bill/mygitosc/adapter/ProjectAdapter.java" />
         <option value="$PROJECT_DIR$/mygitosc/src/main/java/com/bill/mygitosc/adapter/BaseStateRecyclerAdapter.java" />
-        <option value="$PROJECT_DIR$/mygitosc/src/main/java/com/bill/mygitosc/ui/base/BaseSwipeRefreshFragment.java" />
         <option value="$PROJECT_DIR$/mygitosc/src/main/java/com/bill/mygitosc/ui/activity/LoginActivity.java" />
+        <option value="$PROJECT_DIR$/mygitosc/src/main/res/layout/recycle_view_layout.xml" />
+        <option value="$PROJECT_DIR$/mygitosc/src/main/java/com/bill/mygitosc/ui/base/BaseSwipeRefreshFragment.java" />
       </list>
     </option>
   </component>
@@ -2639,7 +2629,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="54" y="-8" width="1320" height="784" extended-state="6" />
+    <frame x="54" y="-8" width="1320" height="784" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
@@ -2649,6 +2639,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3392857" sideWeight="0.5031746" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32886904" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32886904" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -2667,7 +2658,6 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32886904" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -2844,16 +2834,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mygitosc/src/main/res/layout/recycle_view_layout.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.14634146">
-          <caret line="5" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mytest/src/main/res/layout/activity_main.xml">
       <provider editor-type-id="android-designer">
         <state />
@@ -2974,6 +2954,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.7763975">
           <caret line="78" column="25" selection-start-line="78" selection-start-column="25" selection-end-line="78" selection-end-column="25" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -3023,14 +3006,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.39130434">
           <caret line="19" column="24" selection-start-line="19" selection-start-column="24" selection-end-line="19" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mygitosc/src/main/java/com/bill/mygitosc/adapter/EventAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.55279505">
-          <caret line="119" column="25" selection-start-line="119" selection-start-column="25" selection-end-line="119" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3092,8 +3067,8 @@
         <state vertical-scroll-proportion="1.2298137">
           <caret line="50" column="5" selection-start-line="50" selection-start-column="5" selection-end-line="50" selection-end-column="5" />
           <folding>
-            <element signature="e#1044#1045#0" expanded="true" />
-            <element signature="e#1079#1080#0" expanded="true" />
+            <element signature="e#1044#1045#0" expanded="false" />
+            <element signature="e#1079#1080#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -3103,23 +3078,61 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="24" column="5" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mygitosc/src/main/java/com/bill/mygitosc/ui/base/BaseSwipeRefreshFragment.java">
+    <entry file="file://$PROJECT_DIR$/mygitosc/src/main/java/com/bill/mygitosc/adapter/EventAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="105" column="73" selection-start-line="105" selection-start-column="73" selection-end-line="105" selection-end-column="73" />
+        <state vertical-scroll-proportion="0.7204969">
+          <caret line="98" column="7" selection-start-line="98" selection-start-column="7" selection-end-line="98" selection-end-column="7" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mygitosc/src/main/java/com/bill/mygitosc/ui/activity/LoginActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.63819873">
-          <caret line="104" column="31" selection-start-line="104" selection-start-column="12" selection-end-line="104" selection-end-column="31" />
+        <state vertical-scroll-proportion="0.41459626">
+          <caret line="84" column="13" selection-start-line="84" selection-start-column="13" selection-end-line="84" selection-end-column="13" />
+          <folding>
+            <element signature="e#1885#1921#0" expanded="true" />
+            <element signature="e#2743#2776#0" expanded="true" />
+            <element signature="e#2884#2917#0" expanded="true" />
+            <element signature="e#3041#3075#0" expanded="true" />
+            <element signature="e#3170#3203#0" expanded="true" />
+            <element signature="e#3357#3386#0" expanded="true" />
+            <element signature="e#3476#3509#0" expanded="true" />
+            <element signature="e#4181#4182#0" expanded="true" />
+            <element signature="e#4227#4228#0" expanded="true" />
+            <element signature="e#5345#5389#0" expanded="true" />
+            <element signature="e#5409#5431#0" expanded="true" />
+            <element signature="e#5653#5679#0" expanded="true" />
+            <element signature="e#6407#6450#0" expanded="true" />
+            <element signature="e#6584#6627#0" expanded="true" />
+            <element signature="e#7239#7269#0" expanded="true" />
+            <element signature="e#7892#7926#0" expanded="true" />
+            <element signature="e#7989#8018#0" expanded="true" />
+            <element signature="e#8523#8558#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mygitosc/src/main/res/layout/recycle_view_layout.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8195122">
+          <caret line="28" column="22" selection-start-line="28" selection-start-column="22" selection-end-line="28" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mygitosc/src/main/java/com/bill/mygitosc/ui/base/BaseSwipeRefreshFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.44720498">
+          <caret line="166" column="32" selection-start-line="166" selection-start-column="32" selection-end-line="166" selection-end-column="32" />
           <folding />
         </state>
       </provider>

@@ -80,11 +80,11 @@ public class LoginActivity extends BaseActivity implements TextView.OnEditorActi
             } else {
                 loginButton.setEnabled(true);
             }
-            if(TextUtils.isEmpty(pwd)){
+            if (TextUtils.isEmpty(pwd)) {
                 passwordInputLayout.setHint(getString(R.string.password_hint));
             }
 
-            if(TextUtils.isEmpty(account)){
+            if (TextUtils.isEmpty(account)) {
                 userNameInputLayout.setHint(getString(R.string.username_hint));
             }
         }
@@ -100,7 +100,6 @@ public class LoginActivity extends BaseActivity implements TextView.OnEditorActi
         String existPwd = sharedPreferences.getString(getString(R.string.login_pwd), "");
         if (TextUtils.isEmpty(existPwd)) {
             passwordInputLayout.setHint(getString(R.string.password_hint));
-
         } else {
             passwordInputLayout.getEditText().setText(CryptUtils.decode(CryptUtils.ACCOUNT_PWD, existPwd));
         }
@@ -144,12 +143,12 @@ public class LoginActivity extends BaseActivity implements TextView.OnEditorActi
         if (!TextUtils.isEmpty(userNameInputLayout.getEditText().getText().toString()) &&
                 !TextUtils.isEmpty(passwordInputLayout.getEditText().getText().toString())) {
             int dialogTheme;
-            if(AppContext.getInstance().getCurrentTheme()==R.style.AppBaseTheme){
-                dialogTheme=R.style.BlueDialogTheme;
-            }else{
-                dialogTheme=R.style.GreenDialogTheme;
+            if (AppContext.getInstance().getCurrentTheme() == R.style.AppBaseTheme) {
+                dialogTheme = R.style.BlueDialogTheme;
+            } else {
+                dialogTheme = R.style.GreenDialogTheme;
             }
-            AlertDialog.Builder builder = new AlertDialog.Builder(this,dialogTheme);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogTheme);
             builder.setTitle(getString(R.string.login_leave_dialog_title)).setPositiveButton(getString(R.string.OK), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
