@@ -42,27 +42,27 @@ public class Utils {
         String eventTitle = "";
         int action = event.getAction();
         switch (action) {
-            case EventType.EVENT_TYPE_CREATED:// 创建了issue
+            case Event.EVENT_TYPE_CREATED:// 创建了issue
                 eventTitle = event.getTarget_type() + getEventsTitle(event);
                 title = context.getString(R.string.in_project_title) + pAuthor_And_pName + context.getString(R.string.create_project_title) + eventTitle;
                 break;
-            case EventType.EVENT_TYPE_UPDATED:// 更新项目
+            case Event.EVENT_TYPE_UPDATED:// 更新项目
                 title = context.getString(R.string.update_project_title) + pAuthor_And_pName;
                 break;
-            case EventType.EVENT_TYPE_CLOSED:// 关闭项目
+            case Event.EVENT_TYPE_CLOSED:// 关闭项目
                 eventTitle = event.getTarget_type() + getEventsTitle(event);
                 title = context.getString(R.string.close_project_title) + pAuthor_And_pName + " -- " + eventTitle;
                 break;
-            case EventType.EVENT_TYPE_REOPENED:// 重新打开了项目
+            case Event.EVENT_TYPE_REOPENED:// 重新打开了项目
                 eventTitle = event.getTarget_type() + getEventsTitle(event);
                 title = context.getString(R.string.reopen_project_title) + pAuthor_And_pName + " -- " + eventTitle;
                 break;
-            case EventType.EVENT_TYPE_PUSHED:// push
+            case Event.EVENT_TYPE_PUSHED:// push
                 eventTitle = event.getData().getRef()
                         .substring(event.getData().getRef().lastIndexOf("/") + 1);
                 title = context.getString(R.string.pull_project_title) + pAuthor_And_pName + " -- " + eventTitle + context.getString(R.string.branch_title);
                 break;
-            case EventType.EVENT_TYPE_COMMENTED:// 评论
+            case Event.EVENT_TYPE_COMMENTED:// 评论
                 if (event.getEvents().getIssue() != null) {
                     eventTitle = "Issues";
                 } else if (event.getEvents().getPull_request() != null) {
@@ -71,17 +71,17 @@ public class Utils {
                 eventTitle = eventTitle + getEventsTitle(event);
                 title = context.getString(R.string.comment_project_title) + pAuthor_And_pName + " -- " + eventTitle;
                 break;
-            case EventType.EVENT_TYPE_MERGED:// 合并
+            case Event.EVENT_TYPE_MERGED:// 合并
                 eventTitle = event.getTarget_type() + getEventsTitle(event);
                 title = context.getString(R.string.accept_project_title) + pAuthor_And_pName + " -- " + eventTitle;
                 break;
-            case EventType.EVENT_TYPE_JOINED:// # User joined project
+            case Event.EVENT_TYPE_JOINED:// # User joined project
                 title = context.getString(R.string.enter_project_title) + pAuthor_And_pName;
                 break;
-            case EventType.EVENT_TYPE_LEFT:// # User left project
+            case Event.EVENT_TYPE_LEFT:// # User left project
                 title = context.getString(R.string.leave_project_title) + pAuthor_And_pName;
                 break;
-            case EventType.EVENT_TYPE_FORKED:// fork了项目
+            case Event.EVENT_TYPE_FORKED:// fork了项目
                 title = context.getString(R.string.fork_project_title) + pAuthor_And_pName;
                 break;
             default:

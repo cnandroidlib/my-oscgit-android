@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/my-oscgit-android.iml" filepath="$PROJECT_DIR$/my-oscgit-android.iml" />
       <module fileurl="file://$PROJECT_DIR$/mygitosc/mygitosc.iml" filepath="$PROJECT_DIR$/mygitosc/mygitosc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mytest/mytest.iml" filepath="$PROJECT_DIR$/mytest/mytest.iml" />
     </modules>
   </component>
 </project>

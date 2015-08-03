@@ -100,6 +100,7 @@ public class LoginActivity extends BaseActivity implements TextView.OnEditorActi
         String existPwd = sharedPreferences.getString(getString(R.string.login_pwd), "");
         if (TextUtils.isEmpty(existPwd)) {
             passwordInputLayout.setHint(getString(R.string.password_hint));
+
         } else {
             passwordInputLayout.getEditText().setText(CryptUtils.decode(CryptUtils.ACCOUNT_PWD, existPwd));
         }

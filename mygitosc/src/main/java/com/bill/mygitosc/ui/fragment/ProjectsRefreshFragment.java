@@ -2,15 +2,14 @@ package com.bill.mygitosc.ui.fragment;
 
 import android.os.Bundle;
 
-import com.android.volley.toolbox.StringRequest;
-import com.bill.mygitosc.R;
+import com.bill.mygitosc.adapter.BaseStateRecyclerAdapter;
 import com.bill.mygitosc.adapter.ProjectAdapter;
 import com.bill.mygitosc.bean.Project;
-import com.bill.mygitosc.common.AppContext;
 import com.bill.mygitosc.common.HttpUtils;
 import com.bill.mygitosc.ui.base.BaseSwipeRefreshFragment;
+import com.google.gson.reflect.TypeToken;
 
-import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.List;
 
 /**
@@ -22,8 +21,6 @@ public class ProjectsRefreshFragment extends BaseSwipeRefreshFragment<Project> {
 
     protected String currentProjectType;
     private int currentUserID;
-
-    private StringRequest projectListRequest;
 
     public static ProjectsRefreshFragment newInstance(int userid, String projectType) {
         ProjectsRefreshFragment fragment = new ProjectsRefreshFragment();
@@ -44,85 +41,36 @@ public class ProjectsRefreshFragment extends BaseSwipeRefreshFragment<Project> {
     }
 
     @Override
-    protected String getProjectType() {
+    protected boolean itemCompareTo(List<Project> list, Project item) {
+        int size = list.size();
+        for (int i = 0; i < size; i++) {
+            if (item.getId() == list.get(i).getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    protected String getItemType() {
         return currentProjectType;
     }
 
     @Override
-    protected void executeOnLoadDataSuccess(Serializable list) {
-        List<Project> newProjectList = (List<Project>) list;
-        AppContext.log(currentProjectType + ": " + newProjectList.size());
-        ((ProjectAdapter) mDataAdapter).addDataSetToEnd(newProjectList);
+    protected Type getGsonArrayType() {
+        return new TypeToken<List<Project>>() {
+        }.getType();
     }
 
-    /*@Override
-    protected void requestDataFromNetwork(final int page) {
-        setSwipeRefreshLayout(true);
-
-        RequestQueue mQueue = Volley.newRequestQueue(getActivity());
-        final Gson gson = new Gson();
-        AppContext.log(getProjectURL(currentProjectType, page));
-
-        projectListRequest = new StringRequest(getProjectURL(currentProjectType, page),
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        List<Project> newProjectList = gson.fromJson(response, new TypeToken<List<Project>>() {
-                        }.getType());
-                        if (newProjectList.size() > 0) {
-                            if (mDataAdapter instanceof ProjectAdapter) {
-                                AppContext.log("haha");
-                                if (page == 1) {
-                                    AppContext.log("heee");
-                                    if (mDataAdapter.getItemCount() <= AppContext.PAGE_SIZE) {
-                                        ((ProjectAdapter) mDataAdapter).resetDataSet(newProjectList);
-                                    } else {
-                                        AppContext.log("hiiii");
-                                        for (int i = 0; i < newProjectList.size(); i++) {
-                                            if (compareTo(((ProjectAdapter) mDataAdapter).getmDatas(), newProjectList.get(i))) {
-                                                newProjectList.remove(i);
-                                                i--;
-                                            }
-                                        }
-                                        ((ProjectAdapter) mDataAdapter).addDataSet(newProjectList);
-                                        Toast.makeText(getActivity(), ("add " + newProjectList.size() + " item"), 500).show();
-                                    }
-                                } else {
-                                    ((ProjectAdapter) mDataAdapter).addDataSet(newProjectList);
-                                }
-                                setCurrentPage(page);
-                                new SaveCacheTask(getActivity(), (Serializable) newProjectList, getCacheKey() + page).execute();
-                            }
-                        } else {
-                            if (mDataAdapter.getItemCount() == 0) {
-                            }
-                        }
-                        setSwipeRefreshLayout(false);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        if (mDataAdapter.getItemCount() == 0) {
-                        } else {
-                            Toast.makeText(getActivity(), getString(R.string.request_data_error_hint), 500).show();
-                        }
-                        setSwipeRefreshLayout(false);
-                    }
-
-                });
-        mQueue.add(projectListRequest);
-    }*/
-
-
     @Override
-    protected void initRecycleViewAdapter() {
-        mDataAdapter = new ProjectAdapter(getActivity(), R.layout.recycleview_project_item);
+    protected BaseStateRecyclerAdapter getRecyclerAdapter() {
+        BaseStateRecyclerAdapter mDataAdapter = new ProjectAdapter(getActivity());
         if (currentUserID != -1) {
             ((ProjectAdapter) mDataAdapter).setPortraitClickable(false);
         } else {
             ((ProjectAdapter) mDataAdapter).setPortraitClickable(true);
         }
+        return mDataAdapter;
     }
 
     @Override
@@ -151,17 +99,6 @@ public class ProjectsRefreshFragment extends BaseSwipeRefreshFragment<Project> {
         }
     }
 
-    /*protected String getItemURL(String projectType, int page) {
-        if (currentUserID != -1) {
-            return HttpUtils.getSelfProjectsURL(currentUserID, currentProjectType, page);
-        } else {
-            if (isLanguageProject(projectType)) {
-                return HttpUtils.getLanguageProjectsURL(projectType, page);
-            } else {
-                return HttpUtils.getProjectsURL(projectType, page);
-            }
-        }
-    }*/
 
     private boolean isLanguageProject(String projectType) {
         if ("featured".equals(projectType) || "popular".equals(projectType) || "latest".equals(projectType)) {
@@ -171,17 +108,4 @@ public class ProjectsRefreshFragment extends BaseSwipeRefreshFragment<Project> {
     }
 
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onDestroy() {
-        setSwipeRefreshLayout(false);
-        if (projectListRequest != null) {
-            projectListRequest.cancel();
-        }
-        super.onDestroy();
-    }
 }

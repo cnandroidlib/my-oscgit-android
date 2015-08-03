@@ -21,30 +21,29 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bill.mygitosc.R;
 import com.bill.mygitosc.adapter.BaseRecyclerAdapter;
-import com.bill.mygitosc.adapter.ProjectAdapter;
-import com.bill.mygitosc.bean.Project;
+import com.bill.mygitosc.adapter.BaseStateRecyclerAdapter;
 import com.bill.mygitosc.cache.CacheManager;
 import com.bill.mygitosc.common.AppContext;
 import com.bill.mygitosc.common.DividerItemDecoration;
+import com.bill.mygitosc.common.FootViewState;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
 
-public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
+public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
-
-    protected BaseRecyclerAdapter<T> mDataAdapter;
-
+    private BaseStateRecyclerAdapter mDataAdapter;
     private LinearLayoutManager linearLayoutManager;
     private int lastVisiableItem;
-
     private int currentPage;
+
+    private StringRequest listRequest;
+    private boolean requestingFlag;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,13 +70,12 @@ public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements Sw
         linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        initRecycleViewAdapter();
-
-        requestData(currentPage + 1, false);
-
+        mDataAdapter = getRecyclerAdapter();
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mDataAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+
+        requestData(currentPage + 1, false);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -85,7 +83,7 @@ public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements Sw
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     if (lastVisiableItem + 1 == mDataAdapter.getItemCount()) {
-                        if (!swipeRefreshLayout.isRefreshing()) {
+                        if (!requestingFlag) {
                             requestData(currentPage + 1, false);
                         }
                     }
@@ -102,13 +100,26 @@ public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements Sw
     }
 
     private void requestData(int page, boolean refreshFlag) {
+        requestingFlag = true;
+        if (mDataAdapter.getItemCount() != 0) {
+            if(refreshFlag){
+                mDataAdapter.setState(BaseStateRecyclerAdapter.STATE_FULL);
+                mDataAdapter.notifyDataSetChanged();
+            }else{
+                mDataAdapter.setState(BaseStateRecyclerAdapter.STATE_MORE);
+                mDataAdapter.notifyDataSetChanged();
+            }
+
+        }else{
+
+        }
         String cacheKey = getCacheKey() + page;
 
         if (isReadCacheData(refreshFlag, page, cacheKey)) {
             AppContext.log("requestDataFromCache " + cacheKey);
             requestDataFromCache(cacheKey);
         } else {
-            AppContext.log("requestDataFromNetwork " + getProjectType() + " page:" + page);
+            AppContext.log("requestDataFromNetwork " + getItemType() + " page:" + page);
             requestDataFromNetwork(page);
         }
     }
@@ -127,34 +138,44 @@ public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements Sw
         new ReadCacheTask(getActivity()).execute(key);
     }
 
-    @Override
-    public void onRefresh() {
-        currentPage = 0;
-        requestData(currentPage + 1, true);
-        setSwipeRefreshLayout(false);
+    private void requestDataFromNetwork(final int page) {
+        RequestQueue mQueue = Volley.newRequestQueue(getActivity());
+        final Gson gson = new Gson();
+        AppContext.log(getItemURL(page));
+
+        listRequest = new StringRequest(getItemURL(page),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        List<T> newList = gson.fromJson(response, getGsonArrayType());
+                        loadDataComplete(newList);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        loadDataComplete(null);
+                    }
+                });
+        mQueue.add(listRequest);
     }
 
-    protected void setSwipeRefreshLayout(boolean result) {
-        if (result) {
-            swipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    swipeRefreshLayout.setRefreshing(true);
-                    swipeRefreshLayout.setEnabled(false);
-                }
-            });
-        } else {
-            swipeRefreshLayout.setRefreshing(false);
-            swipeRefreshLayout.setEnabled(true);
+
+    @Override
+    public void onRefresh() {
+        if (!requestingFlag) {
+            currentPage = 0;
+            requestData(currentPage + 1, true);
+            swipeRefreshLayout.setEnabled(false);
         }
     }
 
-    public class SaveCacheTask extends AsyncTask<Void, Void, Void> {
+    private class SaveCacheTask extends AsyncTask<Void, Void, Void> {
         private final WeakReference<Context> mContext;
         private final Serializable seri;
         private final String key;
 
-        public SaveCacheTask(Context context, Serializable serializable, String key) {
+        private SaveCacheTask(Context context, Serializable serializable, String key) {
             mContext = new WeakReference<Context>(context);
             this.seri = serializable;
             this.key = key;
@@ -168,10 +189,10 @@ public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements Sw
         }
     }
 
-    public class ReadCacheTask extends AsyncTask<String, Void, Serializable> {
+    private class ReadCacheTask extends AsyncTask<String, Void, Serializable> {
         private final WeakReference<Context> mContext;
 
-        public ReadCacheTask(Context context) {
+        private ReadCacheTask(Context context) {
             mContext = new WeakReference<Context>(context);
         }
 
@@ -190,98 +211,90 @@ public abstract class BaseSwipeRefreshFragment<T> extends Fragment implements Sw
         protected void onPostExecute(Serializable list) {
             super.onPostExecute(list);
             if (list != null) {
-                currentPage++;
-                executeOnLoadDataSuccess(list);
+                readCacheListSuccess(list);
             } else {
-                //executeOnLoadDataError(null);
+                readCacheListSuccess(null);
             }
         }
     }
 
-    protected void requestDataFromNetwork(final int page) {
-        setSwipeRefreshLayout(true);
-
-        RequestQueue mQueue = Volley.newRequestQueue(getActivity());
-        final Gson gson = new Gson();
-        AppContext.log(getItemURL(page));
-
-        StringRequest listRequest = new StringRequest(getItemURL(page),
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        List<T> newList = gson.fromJson(response, new TypeToken<List<T>>() {
-                        }.getType());
-                        if (newList.size() > 0) {
-                                AppContext.log("haha");
-                                if (page == 1) {
-                                    AppContext.log("heee");
-                                    if (mDataAdapter.getItemCount() <= AppContext.PAGE_SIZE) {
-                                        mDataAdapter.resetDataSet(newList);
-                                    } else {
-                                        AppContext.log("hiiii");
-                                        /*for (int i = 0; i < newList.size(); i++) {
-                                            if (compareTo(((ProjectAdapter) mDataAdapter).getmDatas(), newList.get(i))) {
-                                                newList.remove(i);
-                                                i--;
-                                            }
-                                        }*/
-                                        mDataAdapter.addDataSetToEnd(newList);
-                                        Toast.makeText(getActivity(), ("add " + newList.size() + " item"), 500).show();
-                                    }
-                                } else {
-                                    mDataAdapter.addDataSetToEnd(newList);
-                                }
-                                setCurrentPage(page);
-                                new SaveCacheTask(getActivity(), (Serializable) newList, getCacheKey() + page).execute();
-                        } else {
-                            if (mDataAdapter.getItemCount() == 0) {
-                            }
-                        }
-                        setSwipeRefreshLayout(false);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        if (mDataAdapter.getItemCount() == 0) {
-                        } else {
-                            Toast.makeText(getActivity(), getString(R.string.request_data_error_hint), 500).show();
-                        }
-                        setSwipeRefreshLayout(false);
-                    }
-
-                });
-        mQueue.add(listRequest);
+    private void readCacheListSuccess(Serializable serializable) {
+        if (serializable == null) {
+            requestData(currentPage + 1, true);
+            return;
+        }
+        List<T> list = (List<T>) serializable;
+        AppContext.log("readCacheListSuccess " + getItemType() + " num:" + list.size());
+        if (list.size() == 0) {
+            requestData(currentPage + 1, true);
+        } else {
+            loadDataComplete(list);
+        }
     }
 
-    /*private boolean compareTo(List<T> list, T item) {
-        int size = list.size();
-        for (int i = 0; i < size; i++) {
-            if (item.getId() == list.get(i).getId()) {
-                return true;
+    private void loadDataComplete(List<T> list) {
+        if (swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+            swipeRefreshLayout.setEnabled(true);
+        }
+        requestingFlag = false;
+
+        if (list == null) {
+            Toast.makeText(getActivity(), getString(R.string.request_data_error_hint), 500).show();
+            mDataAdapter.setState(BaseStateRecyclerAdapter.STATE_ERROR);
+            mDataAdapter.notifyDataSetChanged();
+            return;
+        }
+        if (list.size() > 0) {
+            if (currentPage == 0) {
+                if (list.size() < AppContext.PAGE_SIZE) {
+                    mDataAdapter.resetDataSet(list);
+                } else {
+                    for (int i = 0; i < list.size(); i++) {
+                        if (itemCompareTo(mDataAdapter.getDataSet(), list.get(i))) {
+                            list.remove(i);
+                            i--;
+                        }
+                    }
+                    mDataAdapter.addDataSetToStart(list);
+                    Toast.makeText(getActivity(), ("add " + list.size() + " item"), 500).show();
+                }
+                mDataAdapter.setState(BaseStateRecyclerAdapter.STATE_FULL);
+            } else {
+                mDataAdapter.setState(BaseStateRecyclerAdapter.STATE_MORE);
+                mDataAdapter.addDataSetToEnd(list);
+            }
+            currentPage++;
+            new SaveCacheTask(getActivity(), (Serializable) list, getCacheKey() + currentPage).execute();
+        } else {
+            AppContext.log("no data:" + mDataAdapter.getItemCount());
+            if (mDataAdapter.getItemCount() == 1) {
+                mDataAdapter.setState(BaseStateRecyclerAdapter.STATE_EMPTY);
+                mDataAdapter.notifyDataSetChanged();
+            } else {
+                mDataAdapter.setState(BaseStateRecyclerAdapter.STATE_FULL);
+                mDataAdapter.notifyDataSetChanged();
             }
         }
-        return false;
-    }*/
-
-    protected abstract String getProjectType();
-
-    protected abstract void executeOnLoadDataSuccess(Serializable list);
-
-    public void setCurrentPage(int currentPage) {
-        this.currentPage = currentPage;
     }
 
-    //protected abstract void requestDataFromNetwork(int page);
+    @Override
+    public void onDestroy() {
+        if (listRequest != null) {
+            listRequest.cancel();
+        }
+        super.onDestroy();
+    }
+
+    protected abstract boolean itemCompareTo(List<T> list, T item);
 
     protected abstract String getCacheKey();
 
-    protected abstract void initRecycleViewAdapter();
-
-    @Override
-    public void onClick(View v) {
-
-    }
+    protected abstract BaseStateRecyclerAdapter getRecyclerAdapter();
 
     protected abstract String getItemURL(int page);
+
+    protected abstract String getItemType();
+
+    protected abstract java.lang.reflect.Type getGsonArrayType();
 }

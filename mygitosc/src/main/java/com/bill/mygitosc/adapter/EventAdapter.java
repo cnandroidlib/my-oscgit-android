@@ -18,7 +18,6 @@ import com.bill.mygitosc.bean.Event;
 import com.bill.mygitosc.common.BitmapCache;
 import com.bill.mygitosc.common.Utils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -26,7 +25,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by liaobb on 2015/7/27.
  */
-public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
+public class EventAdapter extends BaseStateRecyclerAdapter<Event> {
     private ImageLoader mImageLoader;
     private List<Event> mDatas;
     private Context context;
@@ -34,21 +33,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     private boolean noPictureMode;
 
     public EventAdapter(Context context){
-        this.context = context;
-        this.mDatas = new ArrayList<>();
+        super(context);
         RequestQueue mQueue = Volley.newRequestQueue(context);
         mImageLoader = new ImageLoader(mQueue, new BitmapCache());
         noPictureMode = Utils.checkNoPic(context);
     }
 
-
-    public EventAdapter(Context context, List<Event> mData) {
-        this.context = context;
-        this.mDatas = mData;
-        RequestQueue mQueue = Volley.newRequestQueue(context);
-        mImageLoader = new ImageLoader(mQueue, new BitmapCache());
-        noPictureMode = Utils.checkNoPic(context);
-    }
 
     @Override
     public EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -57,36 +47,37 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     }
 
     @Override
-    public void onBindViewHolder(EventViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        EventViewHolder eventHolder=(EventViewHolder)holder;
         Event event = mDatas.get(position);
         String title = Utils.parseEventTitle(context, event
                 .getAuthor().getName(), event.getProject().getOwner().getName()
                 + "/" + event.getProject().getName(), event);
-        holder.ev_title.setText(title);
+        eventHolder.ev_title.setText(title);
 
         if (!TextUtils.isEmpty(event.getUpdated_at())) {
             String updateTime = Utils.friendlyFormat(context, event.getUpdated_at());
             if (!TextUtils.isEmpty(updateTime)) {
-                holder.ev_data.setText(updateTime);
+                eventHolder.ev_data.setText(updateTime);
             }
         }
 
-        holder.ev_all_commits_list.setVisibility(View.GONE);
-        holder.ev_all_commits_list.removeAllViews();
+        eventHolder.ev_all_commits_list.setVisibility(View.GONE);
+        eventHolder.ev_all_commits_list.removeAllViews();
         if (event.getData() != null) {
             List<Commits> commits = event.getData().getCommits();
             if (commits != null && commits.size() > 0) {
-                showCommitInfo(holder.ev_all_commits_list, commits);
-                holder.ev_all_commits_list.setVisibility(View.VISIBLE);
+                showCommitInfo(eventHolder.ev_all_commits_list, commits);
+                eventHolder.ev_all_commits_list.setVisibility(View.VISIBLE);
             }
         }
 
         if (!noPictureMode) {
             String portraitURL = event.getAuthor().getNew_portrait();
             if (portraitURL.endsWith("portrait.gif")) {
-                holder.ev_portrait.setImageResource(R.drawable.mini_avatar);
+                eventHolder.ev_portrait.setImageResource(R.drawable.mini_avatar);
             } else {
-                ImageLoader.ImageListener listener = ImageLoader.getImageListener(holder.ev_portrait,
+                ImageLoader.ImageListener listener = ImageLoader.getImageListener(eventHolder.ev_portrait,
                         R.drawable.mini_avatar, R.drawable.mini_avatar);
                 mImageLoader.get(portraitURL, listener);
             }
@@ -118,25 +109,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         layout.addView(v);
     }
 
-    @Override
-    public int getItemCount() {
-        return mDatas.size();
-    }
-
-    public void addDataSet(List<Event> addNewProjectList) {
-        mDatas.addAll(addNewProjectList);
-        notifyDataSetChanged();
-    }
-
-    public void resetDataSet(List<Event> newProjectList) {
-        mDatas.clear();
-        mDatas.addAll(newProjectList);
-        notifyDataSetChanged();
-    }
-
-    /*public void setPortraitClickable(boolean portraitClickable) {
-        this.portraitClickable = portraitClickable;
-    }*/
 
     class EventViewHolder extends RecyclerView.ViewHolder {
         CircleImageView ev_portrait;

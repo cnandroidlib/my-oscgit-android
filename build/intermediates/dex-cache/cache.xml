@@ -2,95 +2,39 @@
 <items version="2" >
 
     <item
-        jar="D:\GitHub\my-oscgit-android\mygitosc\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.2.0\jars\classes.jar"
+        jar="D:\Program Files (x86)\Android\android-sdk\extras\android\m2repository\com\android\support\support-annotations\22.2.1\support-annotations-22.2.1.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
-        <dex dex="D:\GitHub\my-oscgit-android\mygitosc\build\intermediates\pre-dexed\debug\classes-0bfc4e35197946d0466ebccb857ab9fadb4fdfec.jar" />
+        sha1="61a0ff5c29295ec56d7e0bd3d25d95dbf71b4b2b">
+        <dex dex="D:\GitHub\my-oscgit-android\mytest\build\intermediates\pre-dexed\debug\support-annotations-22.2.1-e52df0fac2d7439984fbb695cd902b1870dbaf57.jar" />
     </item>
     <item
-        jar="D:\GitHub\my-oscgit-android\mygitosc\build\intermediates\exploded-aar\com.android.support\design\22.2.0\jars\classes.jar"
+        jar="D:\GitHub\my-oscgit-android\mytest\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.1\jars\libs\internal_impl-22.2.1.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="fc63b820d54c8a27a3a614bdd93920e0076581c2">
-        <dex dex="D:\GitHub\my-oscgit-android\mygitosc\build\intermediates\pre-dexed\debug\classes-0befd21d70c6b8c8e7aa0f9486fe396a9bfbce9f.jar" />
+        sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
+        <dex dex="D:\GitHub\my-oscgit-android\mytest\build\intermediates\pre-dexed\debug\internal_impl-22.2.1-8421a713ddbb9acde59542bbd9eed81301e2bb70.jar" />
     </item>
     <item
-        jar="D:\GitHub\my-oscgit-android\mygitosc\build\intermediates\exploded-aar\com.jenzz\materialpreference\1.3\jars\classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="6d1bbd17cf3b4c1ada9065abca969c325ac221c6">
-        <dex dex="D:\GitHub\my-oscgit-android\mygitosc\build\intermediates\pre-dexed\debug\classes-781fb79f8ea18181b5e1d758676a61a8fe188a80.jar" />
-    </item>
-    <item
-        jar="C:\Users\liaobb\.gradle\caches\modules-2\files-2.1\de.greenrobot\eventbus\2.4.0\ddd166d01b3158d1c00576d29f7ed15c030df719\eventbus-2.4.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="ddd166d01b3158d1c00576d29f7ed15c030df719">
-        <dex dex="D:\GitHub\my-oscgit-android\mygitosc\build\intermediates\pre-dexed\debug\eventbus-2.4.0-211eccbef6dfd5c9566bf145f2159e390495e4f2.jar" />
-    </item>
-    <item
-        jar="D:\GitHub\my-oscgit-android\mygitosc\build\intermediates\exploded-aar\com.android.support\cardview-v7\22.2.0\jars\classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="97f7e239e86ef994de894818fdd8a71d2e89d6aa">
-        <dex dex="D:\GitHub\my-oscgit-android\mygitosc\build\intermediates\pre-dexed\debug\classes-40c55758a680057ac74c003cf87c991a3ff6c4cf.jar" />
-    </item>
-    <item
-        jar="D:\GitHub\my-oscgit-android\mygitosc\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\jars\classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
-        <dex dex="D:\GitHub\my-oscgit-android\mygitosc\build\intermediates\pre-dexed\debug\classes-6210d07385156195879c16897578a080cb7bc0a6.jar" />
-    </item>
-    <item
-        jar="D:\GitHub\my-oscgit-android\mygitosc\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\22.2.0\jars\classes.jar"
+        jar="D:\GitHub\my-oscgit-android\mytest\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\22.2.0\jars\classes.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="5b37cf49773f7f17aca9830efd3053b0cac56728">
-        <dex dex="D:\GitHub\my-oscgit-android\mygitosc\build\intermediates\pre-dexed\debug\classes-c78dd7d394970cc0a6a9c2a9c5eab7e96ac095fb.jar" />
+        <dex dex="D:\GitHub\my-oscgit-android\mytest\build\intermediates\pre-dexed\debug\classes-6c21f453c8bc4dac7557c49c05e9902f30c09a6f.jar" />
     </item>
     <item
-        jar="D:\GitHub\my-oscgit-android\mygitosc\libs\volley.jar"
+        jar="D:\GitHub\my-oscgit-android\mytest\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.1\jars\classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="4a94601db9bdfb7dc60efabb3dea91a0675f591d">
-        <dex dex="D:\GitHub\my-oscgit-android\mygitosc\build\intermediates\pre-dexed\debug\volley-0f84ec0a21d3a902928a459af170ec810ed7ba33.jar" />
+        sha1="f8efd0096475e0daf054267b61544e10dc776503">
+        <dex dex="D:\GitHub\my-oscgit-android\mytest\build\intermediates\pre-dexed\debug\classes-8504aaa034e06aff936a758eefed9542d74a9445.jar" />
     </item>
     <item
-        jar="D:\GitHub\my-oscgit-android\mygitosc\libs\gson-2.3.1.jar"
+        jar="D:\GitHub\my-oscgit-android\mytest\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.2.1\jars\classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
-        <dex dex="D:\GitHub\my-oscgit-android\mygitosc\build\intermediates\pre-dexed\debug\gson-2.3.1-98da04a18901ec90faa16f958a0ab6d60a13f1e1.jar" />
-    </item>
-    <item
-        jar="C:\Users\liaobb\.gradle\caches\modules-2\files-2.1\com.jakewharton\butterknife\6.1.0\63735f48b82bcd24cdd33821342428252eb1ca5a\butterknife-6.1.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="63735f48b82bcd24cdd33821342428252eb1ca5a">
-        <dex dex="D:\GitHub\my-oscgit-android\mygitosc\build\intermediates\pre-dexed\debug\butterknife-6.1.0-ee11d329b9e18a8a5f7d31a7df0b05e26921f8c7.jar" />
-    </item>
-    <item
-        jar="D:\GitHub\my-oscgit-android\mygitosc\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\jars\libs\internal_impl-22.2.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
-        <dex dex="D:\GitHub\my-oscgit-android\mygitosc\build\intermediates\pre-dexed\debug\internal_impl-22.2.0-264330bf58173dd7dbf33419669c5a80a8e2a71c.jar" />
-    </item>
-    <item
-        jar="D:\GitHub\my-oscgit-android\mygitosc\build\intermediates\exploded-aar\de.hdodenhof\circleimageview\1.3.0\jars\classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="ac6948cce36f694f3eb3d73a135e298dc4b3527a">
-        <dex dex="D:\GitHub\my-oscgit-android\mygitosc\build\intermediates\pre-dexed\debug\classes-46f409903ad229129f5f30f1847b3fcaac0a7a4e.jar" />
-    </item>
-    <item
-        jar="D:\Program Files (x86)\Android\android-sdk\extras\android\m2repository\com\android\support\support-annotations\22.2.0\support-annotations-22.2.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
-        <dex dex="D:\GitHub\my-oscgit-android\mygitosc\build\intermediates\pre-dexed\debug\support-annotations-22.2.0-30451dcc80cdf940df3884542b58afce5fbf3f2e.jar" />
+        sha1="4486e953d1f35f8ccab098b1dd67146366d5f731">
+        <dex dex="D:\GitHub\my-oscgit-android\mytest\build\intermediates\pre-dexed\debug\classes-7071072b9ab43f2b521884c7309fe41a386051e7.jar" />
     </item>
 
 </items>

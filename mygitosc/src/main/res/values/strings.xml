@@ -142,5 +142,9 @@
     <string name="title_activity_view_language_projecto">ViewLanguageProjectoActivity</string>
     <string name="language_project_title">项目列表</string>
     <string name="search_language_hint">搜索语言</string>
+    <string name="foot_state_error">加载数据错误，请重新加载</string>
+    <string name="foot_state_empty">没有更多的数据</string>
+    <string name="foot_state_more">正在加载...请稍后</string>
+    <string name="foot_state_full">已加载全部数据</string>
 
 </resources>

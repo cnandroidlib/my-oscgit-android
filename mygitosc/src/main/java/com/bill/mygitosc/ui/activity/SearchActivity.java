@@ -76,7 +76,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
 
-        mDataAdapter = new ProjectAdapter(this,R.layout.recycleview_project_item);
+        mDataAdapter = new ProjectAdapter(this);
         recyclerView.setAdapter(mDataAdapter);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {

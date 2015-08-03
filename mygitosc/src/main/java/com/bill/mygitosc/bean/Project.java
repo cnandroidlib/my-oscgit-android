@@ -20,6 +20,10 @@ public class Project implements Serializable {
     private boolean stared;
     private boolean watched;
 
+    public Project(String s) {
+        this.name=s;
+    }
+
     public int getId() {
         return id;
     }
