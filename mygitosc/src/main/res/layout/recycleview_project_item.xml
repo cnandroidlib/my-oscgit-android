@@ -61,11 +61,6 @@
                 style="@style/project_list_someinfo"
                 android:text="@string/sem_tag" />
 
-            <!--<TextView
-                android:id="@+id/tv_createtime"
-                style="@style/project_list_someinfo"
-                android:text="@string/unknow_time" />-->
-
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

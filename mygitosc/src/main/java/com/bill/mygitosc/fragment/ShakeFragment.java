@@ -1,5 +1,6 @@
 package com.bill.mygitosc.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -30,6 +31,7 @@ import com.android.volley.toolbox.Volley;
 import com.bill.mygitosc.R;
 import com.bill.mygitosc.bean.Project;
 import com.bill.mygitosc.common.BitmapCache;
+import com.bill.mygitosc.ui.ViewProjectInfoActivity;
 import com.bill.mygitosc.utils.OscApiUtils;
 import com.bill.mygitosc.common.ShakeListener;
 import com.bill.mygitosc.common.TypefaceUtils;
@@ -41,6 +43,7 @@ import java.util.HashMap;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 public class ShakeFragment extends Fragment {
     @InjectView(R.id.shakeImgUp)
@@ -198,9 +201,9 @@ public class ShakeFragment extends Fragment {
                             }
                             mProjectDescription.setText(description);
 
-                            TypefaceUtils.setIconText( mProjectStarNums, getString(R.string.sem_watch) + " " + mProject.getWatches_count());
-                            TypefaceUtils.setIconText( mProjectForkNums, getString(R.string.sem_star) + " " + mProject.getStars_count());
-                            TypefaceUtils.setIconText( mProjectWatchNums, getString(R.string.sem_fork) + " " + mProject.getForks_count());
+                            TypefaceUtils.setIconText(mProjectStarNums, getString(R.string.sem_watch) + " " + mProject.getWatches_count());
+                            TypefaceUtils.setIconText(mProjectForkNums, getString(R.string.sem_star) + " " + mProject.getStars_count());
+                            TypefaceUtils.setIconText(mProjectWatchNums, getString(R.string.sem_fork) + " " + mProject.getForks_count());
 
                             String language = mProject.getLanguage();
                             if (TextUtils.isEmpty(language)) {
@@ -240,6 +243,17 @@ public class ShakeFragment extends Fragment {
         mShakeListener.start();
     }
 
+    @OnClick(R.id.shakeres_paroject)
+    public void showProjectInfo() {
+        if (mProject != null) {
+            Intent intent = new Intent(getActivity(), ViewProjectInfoActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(ViewProjectInfoActivity.VIEW_PROJECT_INFO, mProject);
+            intent.putExtras(bundle);
+            getActivity().startActivity(intent);
+        }
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -251,7 +265,7 @@ public class ShakeFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_search) {
+        if (item.getItemId() == R.id.action_share) {
             return true;
         }
         return super.onOptionsItemSelected(item);
