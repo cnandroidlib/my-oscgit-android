@@ -3,6 +3,7 @@ package com.bill.mygitosc.ui;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.InjectView;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PersonalInfoActivity extends BaseActivity {
@@ -31,6 +33,9 @@ public class PersonalInfoActivity extends BaseActivity {
     @InjectView(R.id.description)
     TextView usedescription;
 
+    @InjectView(R.id.bt_logout)
+    Button logoutButton;
+
     private Session currentSession;
 
     @Override
@@ -42,7 +47,6 @@ public class PersonalInfoActivity extends BaseActivity {
             initBaseInfo();
             initOtherInfo();
         }
-
     }
 
     private void initBaseInfo() {
@@ -94,4 +98,12 @@ public class PersonalInfoActivity extends BaseActivity {
         return R.layout.activity_personal_info;
     }
 
+    @OnClick(R.id.bt_logout)
+    public void logout() {
+        if (currentSession != null) {
+            AppContext.getInstance().setSession(null);
+            setResult(AppContext.LOGOUT_SUCCESS_EVNET);
+            finish();
+        }
+    }
 }

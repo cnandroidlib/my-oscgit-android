@@ -16,17 +16,10 @@
         android:textColor="@android:color/white"
         android:textSize="20sp" />
 
-    <!--<ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/id_username"
-        android:layout_marginBottom="16dp"
-        android:src="@mipmap/ic_launcher" />-->
-
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/my_portrait"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_above="@id/id_username"
         android:layout_marginBottom="20dp"
         android:clickable="true"

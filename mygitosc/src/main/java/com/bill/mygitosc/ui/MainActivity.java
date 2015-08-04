@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -23,22 +22,21 @@ import com.android.volley.toolbox.Volley;
 import com.bill.mygitosc.R;
 import com.bill.mygitosc.bean.Session;
 import com.bill.mygitosc.common.AppContext;
-import com.bill.mygitosc.utils.CryptUtils;
 import com.bill.mygitosc.common.DoubleClickExitHelper;
-import com.bill.mygitosc.utils.OscApiUtils;
-import com.bill.mygitosc.utils.Utils;
-import com.bill.mygitosc.gson.GsonRequest;
 import com.bill.mygitosc.fragment.FindInfoTabFragment;
 import com.bill.mygitosc.fragment.LanguageCardFragment;
 import com.bill.mygitosc.fragment.MySelfInfoTabFragment;
 import com.bill.mygitosc.fragment.ShakeFragment;
+import com.bill.mygitosc.gson.GsonRequest;
+import com.bill.mygitosc.utils.CryptUtils;
+import com.bill.mygitosc.utils.OscApiUtils;
+import com.bill.mygitosc.utils.Utils;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
-import de.greenrobot.event.EventBus;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -67,7 +65,6 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        EventBus.getDefault().register(this);
         if (savedInstanceState != null) {
             currentNavViewMenuItem = savedInstanceState.getInt(CURRENT_NAV_VIEW_MENU_ITEM);
         } else {
@@ -76,7 +73,6 @@ public class MainActivity extends BaseActivity {
         doubleClickExitHelper = new DoubleClickExitHelper(this);
 
         setupDrawerContent(mNavigationView);
-        //initToolBar();
         initMainContent(currentNavViewMenuItem);
     }
 
@@ -95,6 +91,11 @@ public class MainActivity extends BaseActivity {
             } else {
                 setNavigationViewGravity(Gravity.START);
             }
+        }
+        if (AppContext.getInstance().getSession() != null) {
+            Session session = AppContext.getInstance().getSession();
+            userNameTextView.setText(session.getName());
+            Utils.getPorTraitFormURL(this, myPortrait, session.getNew_portrait());
         }
     }
 
@@ -136,16 +137,11 @@ public class MainActivity extends BaseActivity {
 
                         mDrawerLayout.closeDrawers();
                         if (currentNavViewMenuItem != menuItemId) {
-                            if (menuItemId == R.id.menu_item_myself && !AppContext.getInstance().getLoginFlag()) {
+                            if (menuItemId == R.id.menu_item_myself && AppContext.getInstance().getSession() == null) {
                                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                                 startActivity(intent);
                                 return true;
                             }
-                            /*if (menuItemId != R.id.menu_item_language) {
-                                getSupportActionBar().setDisplayShowTitleEnabled(true);
-                                getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-                                toolbar.setTitle(menuItem.getTitle());
-                            }*/
                             toolbar.setTitle(menuItem.getTitle());
                             menuItem.setChecked(true);
                             initMainContent(menuItemId);
@@ -199,7 +195,7 @@ public class MainActivity extends BaseActivity {
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    userNameTextView.setText(getString(R.string.drawer_login_fail_hint));
+                    userNameTextView.setText(getString(R.string.need_ano_login_hint));
                     myPortrait.setClickable(true);
                 }
             });
@@ -233,16 +229,8 @@ public class MainActivity extends BaseActivity {
                         });
                 builder.show();
                 return true;
-            case R.id.action_logout:
-                AppContext.getInstance().setSession(null);
-                userNameTextView.setText(getString(R.string.need_ano_login_hint));
-                myPortrait.setImageResource(R.drawable.mini_avatar);
-                if (!mDrawerLayout.isDrawerOpen(mNavigationView)) {
-                    mDrawerLayout.openDrawer(mNavigationView);
-                }
-                return true;
             case R.id.action_remind:
-                if (!AppContext.getInstance().getLoginFlag()) {
+                if (AppContext.getInstance().getSession() == null) {
                     Intent intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);
                 } else {
@@ -289,32 +277,26 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.my_portrait)
     public void onClickPortrait() {
-        if (AppContext.getInstance().getLoginFlag()) {
+        if (AppContext.getInstance().getSession() != null) {
             Intent intent = new Intent(this, PersonalInfoActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, AppContext.MAIN_START_EVNET);
         } else {
             Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-        }
-    }
-
-    public void onEvent(Integer event) {
-        Log.d(AppContext.TAG, "onEvent");
-        switch (event) {
-            case AppContext.LOGIN_SUCCESS_EVNET:
-                Session session = AppContext.getInstance().getSession();
-                Log.d(AppContext.TAG, session.getName());
-                userNameTextView.setText(session.getName());
-                Utils.getPorTraitFormURL(this, myPortrait, session.getNew_portrait());
-                break;
-            default:
-                break;
+            startActivityForResult(intent, AppContext.MAIN_START_EVNET);
         }
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == AppContext.MAIN_START_EVNET)
+            if (resultCode == AppContext.LOGIN_SUCCESS_EVNET) {
+                Session session = AppContext.getInstance().getSession();
+                userNameTextView.setText(session.getName());
+                Utils.getPorTraitFormURL(this, myPortrait, session.getNew_portrait());
+            } else if (resultCode == AppContext.LOGOUT_SUCCESS_EVNET) {
+                userNameTextView.setText(getString(R.string.need_ano_login_hint));
+                myPortrait.setImageResource(R.drawable.mini_avatar);
+            }
     }
 }

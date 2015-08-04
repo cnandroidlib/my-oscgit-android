@@ -3,7 +3,6 @@ package com.bill.mygitosc.ui;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -13,6 +12,7 @@ import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,14 +32,13 @@ import java.util.Map;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
-import de.greenrobot.event.EventBus;
 
 public class LoginActivity extends BaseActivity implements TextView.OnEditorActionListener {
-    @InjectView(R.id.username_textinputlayout)
-    TextInputLayout userNameInputLayout;
+    @InjectView(R.id.username)
+    EditText userName;
 
-    @InjectView(R.id.password_textinputlayout)
-    TextInputLayout passwordInputLayout;
+    @InjectView(R.id.password)
+    EditText password;
 
     @InjectView(R.id.bt_login)
     Button loginButton;
@@ -71,35 +70,24 @@ public class LoginActivity extends BaseActivity implements TextView.OnEditorActi
 
         @Override
         public void afterTextChanged(Editable s) {
-            String account = userNameInputLayout.getEditText().getText().toString();
-            String pwd = passwordInputLayout.getEditText().getText().toString();
+            String account = userName.getText().toString();
+            String pwd = password.getText().toString();
             if (TextUtils.isEmpty(account) || TextUtils.isEmpty(pwd)) {
                 loginButton.setEnabled(false);
             } else {
                 loginButton.setEnabled(true);
-            }
-            if (TextUtils.isEmpty(pwd)) {
-                passwordInputLayout.setHint(getString(R.string.password_hint));
-            }
-
-            if (TextUtils.isEmpty(account)) {
-                userNameInputLayout.setHint(getString(R.string.username_hint));
             }
         }
     };
 
     private void initView() {
         String existUsername = sharedPreferences.getString(getString(R.string.login_username), "");
-        if (TextUtils.isEmpty(existUsername)) {
-            userNameInputLayout.setHint(getString(R.string.username_hint));
-        } else {
-            userNameInputLayout.getEditText().setText(existUsername);
+        if (!TextUtils.isEmpty(existUsername)) {
+            userName.setText(existUsername);
         }
         String existPwd = sharedPreferences.getString(getString(R.string.login_pwd), "");
-        if (TextUtils.isEmpty(existPwd)) {
-            passwordInputLayout.setHint(getString(R.string.password_hint));
-        } else {
-            passwordInputLayout.getEditText().setText(CryptUtils.decode(CryptUtils.ACCOUNT_PWD, existPwd));
+        if (!TextUtils.isEmpty(existPwd)) {
+            password.setText(CryptUtils.decode(CryptUtils.ACCOUNT_PWD, existPwd));
         }
 
         if (!TextUtils.isEmpty(existUsername) && !TextUtils.isEmpty(existPwd)) {
@@ -107,9 +95,9 @@ public class LoginActivity extends BaseActivity implements TextView.OnEditorActi
         }
         inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         // 添加文本变化监听事件
-        userNameInputLayout.getEditText().addTextChangedListener(textWatcher);
-        passwordInputLayout.getEditText().addTextChangedListener(textWatcher);
-        passwordInputLayout.getEditText().setOnEditorActionListener(this);
+        userName.addTextChangedListener(textWatcher);
+        password.addTextChangedListener(textWatcher);
+        password.setOnEditorActionListener(this);
     }
 
     @Override
@@ -121,6 +109,7 @@ public class LoginActivity extends BaseActivity implements TextView.OnEditorActi
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             cancelLoginOrNot();
+            return true;
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -138,8 +127,8 @@ public class LoginActivity extends BaseActivity implements TextView.OnEditorActi
 
     //dialog有问题，不能随主题变化而变化
     private void cancelLoginOrNot() {
-        if (!TextUtils.isEmpty(userNameInputLayout.getEditText().getText().toString()) &&
-                !TextUtils.isEmpty(passwordInputLayout.getEditText().getText().toString())) {
+        if (!TextUtils.isEmpty(userName.getText().toString()) &&
+                !TextUtils.isEmpty(password.getText().toString())) {
             AlertDialog.Builder builder = generateAlterDialog();
             builder.setTitle(getString(R.string.login_leave_dialog_title)).setPositiveButton(getString(R.string.OK), new DialogInterface.OnClickListener() {
                 @Override
@@ -159,13 +148,13 @@ public class LoginActivity extends BaseActivity implements TextView.OnEditorActi
 
     @OnClick(R.id.bt_login)
     public void onClick() {
-        inputMethodManager.hideSoftInputFromWindow(passwordInputLayout.getWindowToken(), 0);
+        inputMethodManager.hideSoftInputFromWindow(password.getWindowToken(), 0);
         checkLogin();
     }
 
     private void checkLogin() {
-        String username = userNameInputLayout.getEditText().getText().toString();
-        String passwd = passwordInputLayout.getEditText().getText().toString();
+        String username = userName.getText().toString();
+        String passwd = password.getText().toString();
 
         //检查用户输入的参数
         if (TextUtils.isEmpty(username)) {
@@ -176,10 +165,6 @@ public class LoginActivity extends BaseActivity implements TextView.OnEditorActi
             Toast.makeText(this, getString(R.string.msg_login_passwork_null), Toast.LENGTH_SHORT).show();
             return;
         }
-
-        // 保存用户名和密码
-        //AppContext.getInstance().saveAccountInfo(CyptoUtils.encode(Contanst.ACCOUNT_EMAIL, email), CyptoUtils.encode(Contanst.ACCOUNT_PWD, passwd));
-
         Login(username, passwd);
     }
 
@@ -205,7 +190,7 @@ public class LoginActivity extends BaseActivity implements TextView.OnEditorActi
                         editor.putString(getString(R.string.login_username), username).commit();
                         editor.putString(getString(R.string.login_pwd), CryptUtils.encode(CryptUtils.ACCOUNT_PWD, passwd)).commit();
                         mLoginProgressDialog.dismiss();
-                        EventBus.getDefault().post(AppContext.LOGIN_SUCCESS_EVNET);
+                        setResult(AppContext.LOGIN_SUCCESS_EVNET);
                         LoginActivity.this.finish();
                     }
                 }, new Response.ErrorListener() {
@@ -224,7 +209,7 @@ public class LoginActivity extends BaseActivity implements TextView.OnEditorActi
         //在输入法里点击了“完成”，则去登录
         if (actionId == EditorInfo.IME_ACTION_DONE) {
             checkLogin();
-            inputMethodManager.hideSoftInputFromWindow(passwordInputLayout.getWindowToken(), 0);
+            inputMethodManager.hideSoftInputFromWindow(password.getWindowToken(), 0);
             return true;
         }
         return false;

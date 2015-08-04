@@ -11,12 +11,14 @@ import com.bill.mygitosc.bean.Session;
  * Created by liaobb on 2015/7/22.
  */
 public class AppContext extends Application {
-    public static final int LOGIN_SUCCESS_EVNET = 0;
+    public static final int MAIN_START_EVNET = 0;
+    public static final int LOGIN_SUCCESS_EVNET = 1;
+    public static final int LOGOUT_SUCCESS_EVNET = 2;
     public static String TAG = "bill.liao";
     public static int PAGE_SIZE = 20;
     private int currentTheme;
+
     private Session session;
-    private boolean loginFlag;
 
     private static AppContext appContext;
 
@@ -50,15 +52,6 @@ public class AppContext extends Application {
 
     public void setSession(Session session) {
         this.session = session;
-        if (session == null) {
-            loginFlag = false;
-        } else {
-            loginFlag = true;
-        }
-    }
-
-    public boolean getLoginFlag() {
-        return loginFlag;
     }
 
     public static void log(String message) {

@@ -183,7 +183,7 @@ public class ViewProjectInfoActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (AppContext.getInstance().getLoginFlag()) {
+        if (AppContext.getInstance().getSession() != null) {
 
             setStarWatchClickable(false);
             RequestQueue mQueue = Volley.newRequestQueue(this);
@@ -264,7 +264,7 @@ public class ViewProjectInfoActivity extends BaseActivity {
     }
 
     private void starOption() {
-        if (!AppContext.getInstance().getLoginFlag()) {
+        if (AppContext.getInstance().getSession() == null) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             return;
@@ -320,7 +320,7 @@ public class ViewProjectInfoActivity extends BaseActivity {
     }
 
     private void watchOption() {
-        if (!AppContext.getInstance().getLoginFlag()) {
+        if (AppContext.getInstance().getSession() == null) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             return;
