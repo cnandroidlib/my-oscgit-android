@@ -17,9 +17,8 @@
 
 最新代码请到https://github.com/BinJing/my-oscgit-android.git下载
 
-### 下一步更新计划
-- 代码重构
-- 使用自定义view代替materialpreference和circleimageview开源框架
+###已知bug
+1. ProgressBar,ProgressDialog等控件在android L平台下不会随着主题变化而变化
 
 ### 引用到的开源库：
 - compile 'com.android.support:design:22.2.0'
